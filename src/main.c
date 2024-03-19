@@ -1,0 +1,17 @@
+/*
+** EPITECH PROJECT, 2024
+** nm/objdump
+** File description:
+** main
+*/
+
+#include <unistd.h>
+
+#include "utils.h"
+#include "client/client.h"
+#include "server/server.h"
+
+int main(int argc, char **argv)
+{
+    return PROG(argc, argv);
+}
