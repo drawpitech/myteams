@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** nm/objdump
+** my_teams
 ** File description:
 ** main
 */
