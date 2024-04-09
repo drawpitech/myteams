@@ -8,7 +8,12 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stdio.h>
+#include <unistd.h>
 #include <uuid/uuid.h>
+#include <linux/limits.h>
+#include <netinet/in.h>
+#include <stdio.h>
 
 #include "utils.h"
 
@@ -83,5 +88,13 @@ typedef struct {
         size_t size;
     } users;
 } server_t;
+
+typedef struct client_s {
+    int fd;
+    struct sockaddr_in sockaddr;
+    socklen_t len;
+    user_t *user;
+    char buffer_cmd[BUFSIZ];
+} client_t;
 
 int myteams_server(int argc, char **argv);
