@@ -8,7 +8,7 @@
 #pragma once
 
 #include <stdbool.h>
-#include <uuid.h>
+#include <uuid/uuid.h>
 
 #include "utils.h"
 
