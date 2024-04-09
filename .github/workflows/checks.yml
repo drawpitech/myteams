@@ -21,15 +21,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Nix cache
-        uses: cachix/install-nix-action@v20
-        with:
-          nix_path: nixpkgs=channel:nixos-23.05
-
       - name: Compiles
-        run: |
-          nix build .#server
-          nix build .#client
+        uses: docker://epitechcontent/epitest-docker
+        with:
+          args: |
+            bash -c "
+            make -j
+            ls ./myteams_cli ./myteams_server
+            "
 
   fix_headers:
     runs-on: ubuntu-latest
