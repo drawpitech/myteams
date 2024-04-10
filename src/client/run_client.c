@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** teams
+** my_teams
 ** File description:
 ** run_client
 */
