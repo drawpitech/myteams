@@ -5,6 +5,7 @@
 ** utils
 */
 
+
 #pragma once
 
 #define STRINGIFY(x) #x
@@ -22,4 +23,9 @@
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
 
-#define LEN_OF (x) (sizeof(x) / sizeof(*x))
+#define ERROR 84
+#define SUCCESS 0
+#define LEN_OF(x) (sizeof(x) / sizeof(*x))
+
+#define MSG_ERR(x) dprintf(STDERR_FILENO, x), ERROR
+#define MSG_ERR_V(x, ...) dprintf(STDERR_FILENO, x, __VA_ARGS__), ERROR

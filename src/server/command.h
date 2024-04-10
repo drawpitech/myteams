@@ -8,13 +8,13 @@
 #pragma once
 
 #include "server.h"
-typedef struct cmd_t {
+typedef struct cmd_s {
     char *name;
     int (*func)(server_t *server, client_t *client, const char *cmd);
     char *help_msg;
-} cmd_s;
+} cmd_t;
 
-static const struct cmd_t commands_tab[] = {
+static const cmd_t commands_tab[] = {
     {"HELP", NULL, "show help information"},
     {"LOGIN", NULL, "set the user_name used by client"},
     {"LOGOUT", NULL, "disconnect the client from the server"},

@@ -7,8 +7,24 @@
 
 #pragma once
 
-static const char *commands[] = {
-    "HELP", "LOGIN", "LOGOUT", "USERS", "USER",
-    "SEND", "MESSAGES", "SUBSCRIBE", "SUBSCRIBED", "UNSUBSCRIBED",
-    "USE", "CREATE", "LIST", "INFO",
+typedef struct cmd_conv {
+    char *cmd;
+    char *conv;
+} cmd_conv_t;
+
+static const cmd_conv_t commands[] = {
+    {"/help", "HELP"},
+    {"/login", "LOGIN"},
+    {"/logout", "LOGOUT"},
+    {"/users", "USERS"},
+    {"/user", "USER"},
+    {"/send", "SEND"},
+    {"/messages", "MESSAGES"},
+    {"/subscribe", "SUBSCRIBE"},
+    {"/subscribed", "SUBSCRIBED"},
+    {"/unsubscribed", "UNSUBSCRIBED"},
+    {"/use", "USE"},
+    {"/create", "CREATE"},
+    {"/list", "LIST"},
+    {"/info", "INFO"},
 };
