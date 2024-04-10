@@ -32,7 +32,9 @@ static run_state_t handle_cmd(connection_t *connect, char *cmd)
     if (!cmd)
         return cli_exit;
     for (; i < LEN_OF(commands); i++) {
-        if (strncmp(commands[i].cmd, cmd, strlen(commands[i].cmd)) == 0) {
+        if (strncmp(commands[i].cmd, cmd, strlen(commands[i].cmd)) == 0 &&
+            (cmd[strlen(commands[i].cmd)] == ' ' ||
+             cmd[strlen(commands[i].cmd)] == '\n')) {
             state = exec_cmd(connect, cmd, &commands[i]);
             break;
         }
