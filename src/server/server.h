@@ -107,3 +107,4 @@ typedef struct {
 } server_t;
 
 int myteams_server(int argc, char **argv);
+void handle_client(server_t *serv, client_t *client);
