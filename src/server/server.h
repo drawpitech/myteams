@@ -7,13 +7,12 @@
 
 #pragma once
 
+#include <linux/limits.h>
+#include <netinet/in.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
-#include <linux/limits.h>
-#include <netinet/in.h>
-#include <stdio.h>
 
 #include "utils.h"
 
@@ -28,8 +27,9 @@ typedef struct {
     char title[MAX_NAME_LENGTH];
     char message[MAX_BODY_LENGTH];
     struct {
-        comment_t *arr;
         size_t size;
+        size_t alloc;
+        comment_t *arr;
     } comment;
 } thread_t;
 
@@ -38,8 +38,9 @@ typedef struct {
     char name[MAX_NAME_LENGTH];
     char description[MAX_DESCRIPTION_LENGTH];
     struct {
-        thread_t *arr;
         size_t size;
+        size_t alloc;
+        thread_t *arr;
     } threads;
 } channel_t;
 
@@ -48,20 +49,23 @@ typedef struct {
     char name[MAX_NAME_LENGTH];
     char description[MAX_DESCRIPTION_LENGTH];
     struct {
-        uuid_t **arr;
         size_t size;
+        size_t alloc;
+        uuid_t **arr;
     } users;
     struct {
-        channel_t *arr;
         size_t size;
+        size_t alloc;
+        channel_t *arr;
     } channels;
 } team_t;
 
 typedef struct {
     uuid_t *uuid;
     struct {
-        uuid_t **arr;
         size_t size;
+        size_t alloc;
+        uuid_t **arr;
     } users;
 } discussion_t;
 
@@ -75,26 +79,31 @@ typedef struct {
 } user_t;
 
 typedef struct {
+    int fd;
+    struct sockaddr_in addr;
+    socklen_t len;
+    user_t user;
+    char buffer_cmd[BUFSIZ];
+} client_t;
+
+typedef struct {
     struct {
-        team_t *arr;
         size_t size;
+        size_t alloc;
+        team_t *arr;
     } teams;
     struct {
         discussion_t *arr;
         size_t size;
     } discussions;
     struct {
-        user_t *arr;
         size_t size;
-    } users;
-} server_t;
-
-typedef struct client_s {
+        size_t alloc;
+        client_t *arr;
+    } clients;
     int fd;
-    struct sockaddr_in sockaddr;
-    socklen_t len;
-    user_t *user;
-    char buffer_cmd[BUFSIZ];
-} client_t;
+    uint16_t port;
+    struct sockaddr_in addr;
+} server_t;
 
 int myteams_server(int argc, char **argv);
