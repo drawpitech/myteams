@@ -41,6 +41,7 @@
             gdb
             libuuid
           ]);
+        LD_LIBRARY_PATH = ["./libs/myteams"];
       };
 
       packages = {
