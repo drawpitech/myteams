@@ -22,4 +22,4 @@
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
 
-#define LEN_OF (x) (sizeof(x) / sizeof(*x))
+#define LEN_OF(x) (sizeof(x) / sizeof(*x))
