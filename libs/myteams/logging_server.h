@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, XXXX
-** NWP_myteams_XXXX
+** my_teams
 ** File description:
-** a file containing libs functions that should be called in myteams_server
+** logging_server
 */
 
 #ifndef LIB_MYTEAMS_LOGGING_SERVER_H
