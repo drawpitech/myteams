@@ -9,11 +9,11 @@
 
 #include "server.h"
 
-static const struct {
+static const struct cmd_s {
     char *name;
     int (*func)(server_t *server, client_t *client, const char *cmd);
     char *description;
-} commands_tab[] = {
+} COMMANDS[] = {
     {"HELP", NULL, "show help information"},
     {"LOGIN", NULL, "set the user_name used by client"},
     {"LOGOUT", NULL, "disconnect the client from the server"},
@@ -35,3 +35,5 @@ static const struct {
         "based on the context, display details of the current resource (see "
         "below)"},
 };
+
+void exec_command(UNUSED server_t *server, client_t *client);

@@ -9,6 +9,7 @@
 #include <string.h>
 #include <sys/select.h>
 
+#include "command.h"
 #include "debug.h"
 #include "server.h"
 
@@ -31,12 +32,6 @@ static void client_disconnect(client_t *client)
     close(client->fd);
     client->fd = -1;
     DEBUG_MSG("Client disconnected\n");
-}
-
-static void exec_command(UNUSED server_t *server, client_t *client)
-{
-    DEBUG("buf: %s", client->buffer);
-    dprintf(client->fd, "PONG\n");
 }
 
 static void client_process_message(
