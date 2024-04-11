@@ -44,7 +44,7 @@ static void append_to_array(void *array, size_t size, void *elem)
         if (*arr == NULL)
             exit(0);
     }
-    memcpy(*arr + *nmemb, elem, size);
+    memcpy(*arr + (*nmemb * size), elem, size);
     *nmemb += 1;
 }
 
@@ -134,6 +134,6 @@ int myteams_server(UNUSED int argc, UNUSED char **argv)
         if (new_client(&serv, &client))
             append_to_array(&serv.clients, sizeof client, &client);
         for (size_t i = 0; i < serv.clients.size; ++i)
-            handle_client(&serv, serv.clients.arr + i);
+            handle_client(&serv, &serv.clients.arr[i]);
     }
 }
