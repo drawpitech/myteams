@@ -83,7 +83,7 @@ typedef struct {
     struct sockaddr_in addr;
     socklen_t len;
     user_t user;
-    char buffer_cmd[BUFSIZ];
+    char buffer[BUFSIZ];
 } client_t;
 
 typedef struct {
@@ -107,3 +107,4 @@ typedef struct {
 } server_t;
 
 int myteams_server(int argc, char **argv);
+void handle_client(server_t *serv, client_t *client);

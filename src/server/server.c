@@ -44,13 +44,14 @@ static void append_to_array(void *array, size_t size, void *elem)
         if (*arr == NULL)
             exit(0);
     }
-    memcpy(*arr + *nmemb, elem, size);
+    memcpy(*arr + (*nmemb * size), elem, size);
     *nmemb += 1;
 }
 
 static bool new_client(server_t *serv, client_t *client)
 {
-    struct timeval tv = {.tv_sec = 1, .tv_usec = 1000};
+    socklen_t addr_len = sizeof(client->addr);
+    struct timeval tv = {.tv_sec = 0, .tv_usec = 1000};
     fd_set fdread;
     fd_set fdwrite;
     int sock = serv->fd;
@@ -62,16 +63,25 @@ static bool new_client(server_t *serv, client_t *client)
     if (select(sock + 1, &fdread, &fdwrite, NULL, &tv) <= 0)
         return false;
     memset(client, 0, sizeof *client);
-    socklen_t addr_len = sizeof(client->addr);
     client->fd = accept(sock, (struct sockaddr *)&client->addr, &addr_len);
     return client->fd != -1;
 }
 
+static bool parse_port(server_t *serv, char *port)
+{
+    char *ptr = port;
+    long p = strtol(port, &ptr, 10);
+
+    if (*ptr != '\0' || p < 0 || p > UINT16_MAX) {
+        fprintf(stderr, "Invalid port number.\n");
+        return false;
+    }
+    serv->port = (uint16_t)p;
+    return true;
+}
+
 static bool parse_args(server_t *serv, int argc, char **argv)
 {
-    char *ptr = NULL;
-    long port = 0;
-
     if (argc != 2) {
         fprintf(stderr, "Invalid number of arguments.\nUse -help for help\n");
         return false;
@@ -87,33 +97,26 @@ static bool parse_args(server_t *serv, int argc, char **argv)
         fprintf(stderr, "Invalid port number.\n");
         return false;
     }
-    ptr = argv[1];
-    port = strtol(argv[1], &ptr, 10);
-    if (*ptr != '\0' || port < 0 || port > UINT16_MAX) {
-        fprintf(stderr, "Invalid port number.\n");
-        return false;
-    }
-    serv->port = (uint16_t)port;
-    return true;
+    return parse_port(serv, argv[1]);
 }
 
-static bool open_server(server_t *serv)
+static bool open_server(server_t *s)
 {
-    serv->fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (serv->fd < 0) {
+    s->fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (s->fd < 0) {
         perror("socket");
         return false;
     }
-    serv->addr = (struct sockaddr_in){
+    s->addr = (struct sockaddr_in){
         .sin_family = AF_INET,
-        .sin_port = htons(serv->port),
+        .sin_port = htons(s->port),
         .sin_addr.s_addr = INADDR_ANY,
     };
-    if (bind(serv->fd, (struct sockaddr *)&serv->addr, sizeof(serv->addr)) < 0) {
+    if (bind(s->fd, (struct sockaddr *)&s->addr, sizeof(s->addr)) < 0) {
         perror("bind");
         return false;
     }
-    if (listen(serv->fd, 5) < 0) {
+    if (listen(s->fd, 5) < 0) {
         perror("listen");
         return false;
     }
@@ -130,5 +133,7 @@ int myteams_server(UNUSED int argc, UNUSED char **argv)
     for (client_t client = {0};;) {
         if (new_client(&serv, &client))
             append_to_array(&serv.clients, sizeof client, &client);
+        for (size_t i = 0; i < serv.clients.size; ++i)
+            handle_client(&serv, &serv.clients.arr[i]);
     }
 }
