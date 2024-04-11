@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_teams
 ** File description:
-** server
+** client
 */
 
 #include <bits/types.h>

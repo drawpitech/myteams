@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** myftp
+** my_teams
 ** File description:
 ** debug
 */
