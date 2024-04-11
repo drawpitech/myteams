@@ -29,7 +29,6 @@ static int open_socket(connection_t *connection, char *ip, int port)
         perror("Connect");
         return ERROR;
     }
-    // connection->servfd = STDOUT_FILENO;
     return SUCCESS;
 }
 

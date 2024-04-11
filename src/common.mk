@@ -15,7 +15,9 @@ CFLAGS += -Wunreachable-code
 CFLAGS += -U_FORTIFY_SOURCE
 CFLAGS += -iquote .
 CFLAGS += -iquote ..
-LDFLAGS :=
+CFLAGS += -I../../libs/myteams
+LDFLAGS := -L../../libs/myteams
+LDLIBS := -lmyteams
 
 # ↓ Binaries
 NAME ?= a.out
@@ -60,30 +62,30 @@ all: $(NAME)
 $(BUILD_DIR)/source/%.o: %.c
 	@ mkdir -p $(dir $@)
 	@ $(ECHO) "[${C_BOLD}${C_RED}CC${C_RESET}] $^"
-	@ $(CC) -o $@ -c $< $(LDFLAGS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
+	@ $(CC) -o $@ -c $< $(LDFLAGS) $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
 $(NAME): $(OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CC${C_RESET}] ${C_GREEN}$@${C_RESET}"
-	@ $(CC) -o $@ $^ $(LDFLAGS) || $(DIE)
+	@ $(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) || $(DIE)
 
 # ↓ Unit tests
 $(BUILD_DIR)/tests/%.o: %.c
 	@ mkdir -p $(dir $@)
 	@ $(ECHO) "[${C_BOLD}${C_RED}CC${C_RESET}] $^"
-	@ $(CC) -o $@ -c $< $(LDFLAGS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
+	@ $(CC) -o $@ -c $< $(LDFLAGS) $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
 # ↓ Asan
 $(BUILD_DIR)/asan/%.o: %.c
 	@ mkdir -p $(dir $@)
 	@ $(ECHO) "[${C_BOLD}${C_RED}CC${C_RESET}] $^"
-	@ $(CC) -o $@ -c $< $(LDFLAGS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
+	@ $(CC) -o $@ -c $< $(LDFLAGS) $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
 $(ASAN_NAME): LDFLAGS += -fsanitize=address,leak,undefined -g3
 $(ASAN_NAME): LDFLAGS += -fanalyzer
 $(ASAN_NAME): CFLAGS += -D DEBUG_MODE
 $(ASAN_NAME): $(ASAN_OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CC${C_RESET}] ${C_GREEN}$@${C_RESET}"
-	@ $(CC) -o $@ $^ $(LDFLAGS) || $(DIE)
+	@ $(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) || $(DIE)
 
 # ↓ Profiler
 $(BUILD_DIR)/prof/%.o: %.c
