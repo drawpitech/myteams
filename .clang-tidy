@@ -12,6 +12,7 @@ Checks: "-*,
   clang-analyzer-*,
   llvm-*,
   llvmlibc-*,
+  -llvmlibc-restrict-system-libc-headers,
 "
 
 CheckOptions:
