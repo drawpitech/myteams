@@ -76,7 +76,8 @@ jobs:
           nix_path: nixpkgs=channel:nixos-23.05
 
       - name: Run coding style
-        run: nix run github:Sigmapitech/cs
+        run: |
+          nix run github:Sigmapitech/cs src
 
   mirror:
     needs: [ unittest, fix_headers, coding_style ]
