@@ -10,6 +10,8 @@
 #include "server.h"
 
 void cmd_user(server_t *server, client_t *client);
+void cmd_login(server_t *server, client_t *client);
+void cmd_logout(server_t *server, client_t *client);
 
 static const struct cmd_s {
     char *name;
@@ -21,8 +23,8 @@ static const struct cmd_s {
     {"INFO", NULL,
         "based on the context, display details of the current resource"},
     {"LIST", NULL, "based on the context, list all the sub resources"},
-    {"LOGIN", NULL, "set the user_name used by client"},
-    {"LOGOUT", NULL, "disconnect the client from the server"},
+    {"LOGIN", cmd_login, "set the user_name used by client"},
+    {"LOGOUT", cmd_logout, "disconnect the client from the server"},
     {"MESSAGES", NULL, "list all messages exchanged with the specified user"},
     {"SEND", NULL, "send a message to specific user"},
     {"SUBSCRIBE", NULL, "subscribe to the events of a team and its sub "
@@ -36,3 +38,4 @@ static const struct cmd_s {
 };
 
 void exec_command(server_t *server, client_t *client);
+char *get_arg(char *buff, int start, int *end);

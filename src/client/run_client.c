@@ -43,8 +43,6 @@ static run_state_t handle_cmd(connection_t *connect, char *cmd)
     free(cmd);
     if (i == LEN_OF(commands))
         printf("Command not found\n");
-    printf("> ");
-    fflush(stdout);
     return state;
 }
 
@@ -80,16 +78,16 @@ int run_client(connection_t *connection)
 
     if (!connection)
         return MSG_ERR("Memory failed\n");
-    printf("> ");
-    fflush(stdout);
     while (state != cli_exit) {
-        if (is_fd_ready(STDIN_FILENO))
-            state = handle_cmd(connection, get_command());
-        if (is_fd_ready(connection->servfd)) {
-            state = get_serv_info(connection);
+        if (state != prompt) {
             printf("> ");
             fflush(stdout);
+            state = prompt;
         }
+        if (is_fd_ready(STDIN_FILENO))
+            state = handle_cmd(connection, get_command());
+        if (is_fd_ready(connection->servfd))
+            state = get_serv_info(connection);
     }
     close(connection->servfd);
     return SUCCESS;

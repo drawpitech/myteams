@@ -72,18 +72,17 @@ typedef struct {
 typedef struct {
     uuid_t uuid;
     char name[MAX_NAME_LENGTH];
-    bool logged;
-    uuid_t team_uuid;
-    uuid_t channel_uuid;
-    uuid_t thread_uuid;
 } user_t;
 
 typedef struct {
     int fd;
     struct sockaddr_in addr;
     socklen_t len;
-    user_t user;
+    user_t *user;
     char buffer[BUFSIZ];
+    uuid_t team_uuid;
+    uuid_t channel_uuid;
+    uuid_t thread_uuid;
 } client_t;
 
 typedef struct {
@@ -101,6 +100,11 @@ typedef struct {
         size_t alloc;
         client_t *arr;
     } clients;
+    struct {
+        size_t size;
+        size_t alloc;
+        user_t *arr;
+    } users;
     int fd;
     uint16_t port;
     struct sockaddr_in addr;
@@ -109,3 +113,4 @@ typedef struct {
 int myteams_server(int argc, char **argv);
 
 user_t *get_user_by_uuid(server_t *server, uuid_t uuid);
+void append_to_array(void *array, size_t size, void *elem);

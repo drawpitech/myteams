@@ -18,16 +18,13 @@
 
 void client_init(client_t *client, int fd)
 {
-    char uuid[37];
-
     if (client == NULL)
         return;
     memset(client, 0, sizeof *client);
     client->fd = fd;
     client->buffer[0] = '\0';
-    uuid_generate(client->user.uuid);
-    uuid_unparse(client->user.uuid, uuid);
-    DEBUG("Client connected: <%s>\n", uuid);
+    client->user = NULL;
+    DEBUG_MSG("Client connected\n");
 }
 
 void client_disconnect(client_t *client)
@@ -51,6 +48,8 @@ static void client_process_message(
     }
     *ptr = '\0';
     strcat(client->buffer, buffer);
+    if (client->buffer[0] == '\0')
+        return;
     exec_command(serv, client);
     client->buffer[0] = '\0';
     client_process_message(serv, client, ptr + 1);
