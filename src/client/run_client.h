@@ -15,3 +15,4 @@ typedef enum run_state {
 } run_state_t;
 
 run_state_t get_serv_info(connection_t *connect);
+int get_info_type(connection_t *connect, void *buff, ssize_t size);
