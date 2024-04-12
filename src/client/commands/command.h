@@ -62,7 +62,7 @@ static const cmd_conv_t commands[] = {
         "reception of all events from a team)"},
     {"/subscribed", "SUBSCRIBED", &cmd_subscribed,
         "list all subscribed teams or list all users subscribed to a team"},
-    {"/unsubscribe", "UNSUBSCRIBED", &cmd_unsubscribe,
+    {"/unsubscribe", "UNSUBSCRIBE", &cmd_unsubscribe,
         "unsubscribe from a team"},
     {"/use", "USE", &cmd_use,
         "sets the command context to a team/channel/thread"},
