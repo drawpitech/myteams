@@ -5,29 +5,29 @@
 ** client
 */
 
+#include "client.h"
+
 #include <bits/types.h>
 #include <string.h>
 #include <sys/select.h>
+#include <uuid/uuid.h>
 
 #include "command.h"
 #include "debug.h"
 #include "server.h"
 
-static bool client_wrote(client_t *client)
+void client_init(client_t *client, int fd)
 {
-    fd_set fdread;
-    struct timeval tv = {.tv_sec = 0, .tv_usec = 1000};
-
-    if (client->fd == -1)
-        return false;
-    FD_ZERO(&fdread);
-    FD_SET(client->fd, &fdread);
-    if (select(client->fd + 1, &fdread, NULL, NULL, &tv) <= 0)
-        return false;
-    return true;
+    if (client == NULL)
+        return;
+    memset(client, 0, sizeof *client);
+    client->fd = fd;
+    client->buffer[0] = '\0';
+    uuid_generate(client->user.uuid);
+    DEBUG_MSG("Client connected: \n");
 }
 
-static void client_disconnect(client_t *client)
+void client_disconnect(client_t *client)
 {
     close(client->fd);
     client->fd = -1;
@@ -51,6 +51,20 @@ static void client_process_message(
     exec_command(serv, client);
     client->buffer[0] = '\0';
     client_process_message(serv, client, ptr + 1);
+}
+
+static bool client_wrote(client_t *client)
+{
+    fd_set fdread;
+    struct timeval tv = {.tv_sec = 0, .tv_usec = 1000};
+
+    if (client->fd == -1)
+        return false;
+    FD_ZERO(&fdread);
+    FD_SET(client->fd, &fdread);
+    if (select(client->fd + 1, &fdread, NULL, NULL, &tv) <= 0)
+        return false;
+    return true;
 }
 
 void handle_client(server_t *serv, client_t *client)

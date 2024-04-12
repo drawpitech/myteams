@@ -16,6 +16,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "client.h"
 #include "utils.h"
 
 /**
@@ -54,17 +55,22 @@ static bool new_client(server_t *serv, client_t *client)
     struct timeval tv = {.tv_sec = 0, .tv_usec = 1000};
     fd_set fdread;
     fd_set fdwrite;
-    int sock = serv->fd;
+    int fd;
 
     FD_ZERO(&fdread);
     FD_ZERO(&fdwrite);
-    FD_SET(sock, &fdread);
-    FD_SET(sock, &fdwrite);
-    if (select(sock + 1, &fdread, &fdwrite, NULL, &tv) <= 0)
+    FD_SET(serv->fd, &fdread);
+    FD_SET(serv->fd, &fdwrite);
+    if (select(serv->fd + 1, &fdread, &fdwrite, NULL, &tv) <= 0)
         return false;
     memset(client, 0, sizeof *client);
-    client->fd = accept(sock, (struct sockaddr *)&client->addr, &addr_len);
-    return client->fd != -1;
+    fd = accept(serv->fd, (struct sockaddr *)&client->addr, &addr_len);
+    if (fd < 0) {
+        perror("accept");
+        return false;
+    }
+    client_init(client, fd);
+    return true;
 }
 
 static bool parse_port(server_t *serv, char *port)

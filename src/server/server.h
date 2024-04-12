@@ -17,13 +17,13 @@
 #include "utils.h"
 
 typedef struct {
-    uuid_t *uuid;
-    uuid_t *author_uuid;
+    uuid_t uuid;
+    uuid_t author_uuid;
     char message[MAX_BODY_LENGTH];
 } comment_t;
 
 typedef struct {
-    uuid_t *uuid;
+    uuid_t uuid;
     char title[MAX_NAME_LENGTH];
     char message[MAX_BODY_LENGTH];
     struct {
@@ -34,7 +34,7 @@ typedef struct {
 } thread_t;
 
 typedef struct {
-    uuid_t *uuid;
+    uuid_t uuid;
     char name[MAX_NAME_LENGTH];
     char description[MAX_DESCRIPTION_LENGTH];
     struct {
@@ -45,13 +45,13 @@ typedef struct {
 } channel_t;
 
 typedef struct {
-    uuid_t *uuid;
+    uuid_t uuid;
     char name[MAX_NAME_LENGTH];
     char description[MAX_DESCRIPTION_LENGTH];
     struct {
         size_t size;
         size_t alloc;
-        uuid_t **arr;
+        uuid_t arr;
     } users;
     struct {
         size_t size;
@@ -61,21 +61,21 @@ typedef struct {
 } team_t;
 
 typedef struct {
-    uuid_t *uuid;
+    uuid_t uuid;
     struct {
         size_t size;
         size_t alloc;
-        uuid_t **arr;
+        uuid_t arr;
     } users;
 } discussion_t;
 
 typedef struct {
-    uuid_t *uuid;
+    uuid_t uuid;
     char name[MAX_NAME_LENGTH];
     bool logged;
-    uuid_t *team_uuid;
-    uuid_t *channel_uuid;
-    uuid_t *thread_uuid;
+    uuid_t team_uuid;
+    uuid_t channel_uuid;
+    uuid_t thread_uuid;
 } user_t;
 
 typedef struct {
@@ -107,4 +107,3 @@ typedef struct {
 } server_t;
 
 int myteams_server(int argc, char **argv);
-void handle_client(server_t *serv, client_t *client);
