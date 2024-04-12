@@ -23,10 +23,13 @@ static int open_socket(connection_t *connection, char *ip, int port)
     connection->sockaddr.sin_port = htons(port);
     connection->sockaddr.sin_addr.s_addr = inet_addr(ip);
     connection->servfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (connection->servfd == -1)
+        return MSG_ERR("Link sokcket failed\n");
     if (connect(
             connection->servfd, (struct sockaddr *)&connection->sockaddr,
             sizeof(connection->sockaddr)) == -1) {
         perror("Connect");
+        close(connection->servfd);
         return ERROR;
     }
     return SUCCESS;

@@ -11,20 +11,26 @@
 #include <stdio.h>
 #include <unistd.h>
 
-static int display_received(connection_t *connect)
+int get_info_type(connection_t *connect, void *buff, ssize_t size)
 {
-    char buff[BUFSIZ];
-
-    if (read(connect->servfd, buff, BUFSIZ) > 0)
-        printf("%s\n", buff);
+    if (read(connect->servfd, buff, size) < size) {
+        dprintf(STDERR_FILENO, "Error: read from server failed.\n");
+        return ERROR;
+    }
     return SUCCESS;
 }
 
 run_state_t get_serv_info(connection_t *connect)
 {
-    if (display_received(connect))
-        dprintf(STDERR_FILENO, "Error while displaying server info\n");
-    printf("> ");
-    fflush(stdout);
+    char code[3] = "000";
+
+    if (get_info_type(connect, code, sizeof(code)) != SUCCESS) {
+        dprintf(STDERR_FILENO, "Error: didn't manage to read from server.\n");
+        return running;
+    }
+    if (code[0] != 3) {
+        dprintf(STDOUT_FILENO, "Error: code %s should not be here.", code);
+        return cli_exit;
+    }
     return running;
 }

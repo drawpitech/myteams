@@ -155,9 +155,9 @@ Such as:
 
         341 -> Gives the created teams informations
 
-        341 -> Gives the created channel informations
+        342 -> Gives the created channel informations
 
-        341 -> Gives the created thread informations
+        343 -> Gives the created thread informations
 
 
 

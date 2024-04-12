@@ -34,6 +34,7 @@ typedef struct thread_info {
 typedef struct reply_info {
     uuid_t thread_uuid;
     uuid_t user_uuid;
+    uuid_t team_uuid;
     time_t reply_timestamp;
     char reply_body[MAX_BODY_LENGTH];
 } reply_info_t;

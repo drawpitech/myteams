@@ -85,8 +85,12 @@ int run_client(connection_t *connection)
     while (state != cli_exit) {
         if (is_fd_ready(STDIN_FILENO))
             state = handle_cmd(connection, get_command());
-        if (is_fd_ready(connection->servfd))
+        if (is_fd_ready(connection->servfd)) {
             state = get_serv_info(connection);
+            printf("> ");
+            fflush(stdout);
+        }
     }
+    close(connection->servfd);
     return SUCCESS;
 }
