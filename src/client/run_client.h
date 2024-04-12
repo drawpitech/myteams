@@ -12,6 +12,7 @@
 typedef enum run_state {
     running,
     cli_exit,
+    prompt,
 } run_state_t;
 
 run_state_t get_serv_info(connection_t *connect);

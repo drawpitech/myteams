@@ -32,7 +32,7 @@
  *   T *array;
  * }
  */
-static void append_to_array(void *array, size_t size, void *elem)
+void append_to_array(void *array, size_t size, void *elem)
 {
     size_t *d = array;
     size_t *nmemb = &d[0];

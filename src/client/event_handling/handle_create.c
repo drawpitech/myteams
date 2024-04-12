@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_teams
 ** File description:
-** heandle_create
+** handle_create
 */
 
 #include "handle_event.h"
