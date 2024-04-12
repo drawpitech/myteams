@@ -14,7 +14,7 @@
           inherit name;
           src = ./.;
 
-          buildInputs = [cc] ++ (with pkgs; [glibc gnumake libossp_uuid]) ++ inputs;
+          buildInputs = [cc] ++ (with pkgs; [glibc gnumake pkg-config libuuid]) ++ inputs;
           makeFlags = ["CC=${cc}/bin/gcc"];
           hardeningDisable = ["format" "fortify"];
           enableParallelBuilding = true;
@@ -39,7 +39,6 @@
             valgrind
             bear
             gdb
-            libuuid
           ]);
         LD_LIBRARY_PATH = ["./libs/myteams"];
       };

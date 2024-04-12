@@ -15,9 +15,13 @@ CFLAGS += -Wunreachable-code
 CFLAGS += -U_FORTIFY_SOURCE
 CFLAGS += -iquote .
 CFLAGS += -iquote ..
+LDFLAGS :=
+LDLIBS := -luuid
+
+# ↓ myteams lib
 CFLAGS += -I../../libs/myteams
-LDFLAGS := -L../../libs/myteams
-LDLIBS := -lmyteams
+LDFLAGS += -L../../libs/myteams
+LDLIBS += -lmyteams
 
 # ↓ Binaries
 NAME ?= a.out
