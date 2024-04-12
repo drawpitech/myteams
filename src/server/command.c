@@ -16,26 +16,29 @@
 
 static int compare(const char *buffer, const struct cmd_s *msg)
 {
-    if (buffer == NULL || msg == NULL || msg->name == NULL)
-        return 1;
-    return strncmp(buffer, msg->name, strlen(msg->name));
+    return (msg->name == NULL) ? 1 : strcmp(buffer, msg->name);
 }
 
 void exec_command(UNUSED server_t *server, client_t *client)
 {
     struct cmd_s *c = NULL;
-    char cmd[256] = {0};
-    char *ptr = cmd;
+    char *ptr = client->buffer;
 
-    strncpy(cmd, client->buffer, sizeof cmd);
-    DEBUG("buf: %s", client->buffer);
-    for (; *ptr && *ptr != ' '; ptr++);
-    *ptr = '\0';
-    c = bsearch(
-        cmd, COMMANDS, LEN_OF(COMMANDS), sizeof *COMMANDS,
+    for (; *ptr; ++ptr) {
+        if (*ptr == ' ') {
+            *ptr = '\0';
+            ++ptr;
+            break;
+        }
+    }
+    DEBUG("cmd: `%s`, args: `%s`", client->buffer, ptr);
+    c = bsearch(client->buffer, COMMANDS, LEN_OF(COMMANDS), sizeof *COMMANDS,
         (int (*)(const void *, const void *))compare);
+    strcpy(client->buffer, ptr);
     if (c == NULL)
-        dprintf(client->fd, "wtf is this command\n");
+        dprintf(client->fd, "501 unrecognised command\n");
+    else if (c->func == NULL)
+        dprintf(client->fd, "503 command not implemented\n");
     else
-        dprintf(client->fd, "%s: PONG\n", c->name);
+        c->func(server, client, ptr + 1);
 }

@@ -123,7 +123,7 @@ static bool open_server(server_t *s)
     return true;
 }
 
-int myteams_server(UNUSED int argc, UNUSED char **argv)
+int myteams_server(int argc, char **argv)
 {
     server_t serv = {0};
 

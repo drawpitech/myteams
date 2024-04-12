@@ -33,4 +33,4 @@ static const struct cmd_s {
     {"USERS", NULL, "get the list of all users that exist on the domain"},
 };
 
-void exec_command(UNUSED server_t *server, client_t *client);
+void exec_command(server_t *server, client_t *client);
