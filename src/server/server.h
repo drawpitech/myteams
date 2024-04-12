@@ -107,3 +107,5 @@ typedef struct {
 } server_t;
 
 int myteams_server(int argc, char **argv);
+
+user_t *get_user_by_uuid(server_t *server, uuid_t uuid);

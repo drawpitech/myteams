@@ -34,11 +34,11 @@ void exec_command(UNUSED server_t *server, client_t *client)
     DEBUG("cmd: `%s`, args: `%s`", client->buffer, ptr);
     c = bsearch(client->buffer, COMMANDS, LEN_OF(COMMANDS), sizeof *COMMANDS,
         (int (*)(const void *, const void *))compare);
-    strcpy(client->buffer, ptr);
+    memmove(client->buffer, ptr, strlen(ptr) + 1);
     if (c == NULL)
         dprintf(client->fd, "501 unrecognised command\n");
     else if (c->func == NULL)
         dprintf(client->fd, "503 command not implemented\n");
     else
-        c->func(server, client, ptr + 1);
+        c->func(server, client);
 }

@@ -18,13 +18,16 @@
 
 void client_init(client_t *client, int fd)
 {
+    char uuid[37];
+
     if (client == NULL)
         return;
     memset(client, 0, sizeof *client);
     client->fd = fd;
     client->buffer[0] = '\0';
     uuid_generate(client->user.uuid);
-    DEBUG_MSG("Client connected: \n");
+    uuid_unparse(client->user.uuid, uuid);
+    DEBUG("Client connected: <%s>\n", uuid);
 }
 
 void client_disconnect(client_t *client)

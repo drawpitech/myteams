@@ -9,9 +9,11 @@
 
 #include "server.h"
 
+void cmd_user(server_t *server, client_t *client);
+
 static const struct cmd_s {
     char *name;
-    int (*func)(server_t *server, client_t *client, const char *cmd);
+    void (*func)(server_t *server, client_t *client);
     char *description;
 } COMMANDS[] = {
     {"CREATE", NULL, "based on the context, create the sub resource"},
@@ -29,7 +31,7 @@ static const struct cmd_s {
         "subscribed to a team"},
     {"UNSUBSCRIBE", NULL, "unsubscribe from a team"},
     {"USE", NULL, "sets the command context to a team/channel/thread"},
-    {"USER", NULL, "get details about the requested user"},
+    {"USER", cmd_user, "get details about the requested user"},
     {"USERS", NULL, "get the list of all users that exist on the domain"},
 };
 
