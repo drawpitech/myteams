@@ -118,12 +118,10 @@ static bool open_server(server_t *s)
         .sin_port = htons(s->port),
         .sin_addr.s_addr = INADDR_ANY,
     };
-    if (bind(s->fd, (struct sockaddr *)&s->addr, sizeof(s->addr)) < 0) {
-        perror("bind");
-        return false;
-    }
-    if (listen(s->fd, 5) < 0) {
-        perror("listen");
+    if (bind(s->fd, (struct sockaddr *)&s->addr, sizeof(s->addr)) < 0 ||
+        listen(s->fd, 5) < 0) {
+        perror("bind/listen");
+        close(s->fd);
         return false;
     }
     return true;
