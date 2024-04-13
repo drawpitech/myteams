@@ -20,7 +20,7 @@ LDLIBS := -luuid
 
 # ↓ myteams lib
 CFLAGS += -isystem ../../libs
-LDFLAGS += -L../../libs/myteams
+LDFLAGS += -L ../../libs/myteams
 LDLIBS += -lmyteams
 
 # ↓ Binaries
@@ -66,7 +66,7 @@ all: $(NAME)
 $(BUILD_DIR)/source/%.o: %.c
 	@ mkdir -p $(dir $@)
 	@ $(ECHO) "[${C_BOLD}${C_RED}CC${C_RESET}] $^"
-	@ $(CC) -o $@ -c $< $(LDFLAGS) $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
+	@ $(CC) -o $@ -c $< $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
 $(NAME): $(OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CC${C_RESET}] ${C_GREEN}$@${C_RESET}"
@@ -76,13 +76,13 @@ $(NAME): $(OBJ)
 $(BUILD_DIR)/tests/%.o: %.c
 	@ mkdir -p $(dir $@)
 	@ $(ECHO) "[${C_BOLD}${C_RED}CC${C_RESET}] $^"
-	@ $(CC) -o $@ -c $< $(LDFLAGS) $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
+	@ $(CC) -o $@ -c $< $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
 # ↓ Asan
 $(BUILD_DIR)/asan/%.o: %.c
 	@ mkdir -p $(dir $@)
 	@ $(ECHO) "[${C_BOLD}${C_RED}CC${C_RESET}] $^"
-	@ $(CC) -o $@ -c $< $(LDFLAGS) $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
+	@ $(CC) -o $@ -c $< $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
 $(ASAN_NAME): LDFLAGS += -fsanitize=address,leak,undefined -g3
 $(ASAN_NAME): LDFLAGS += -fanalyzer
@@ -95,7 +95,7 @@ $(ASAN_NAME): $(ASAN_OBJ)
 $(BUILD_DIR)/prof/%.o: %.c
 	@ mkdir -p $(dir $@)
 	@ $(ECHO) "[${C_BOLD}${C_RED}CC${C_RESET}] $^"
-	@ $(CC) -o $@ -c $< $(LDFLAGS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
+	@ $(CC) -o $@ -c $< $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
 $(PROF_NAME): LDFLAGS += -pg
 $(PROF_NAME): $(PROF_OBJ)
