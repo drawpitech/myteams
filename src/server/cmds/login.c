@@ -59,7 +59,7 @@ void cmd_login(server_t *server, client_t *client)
         dprintf(client->fd, "503 Syntax error.\n");
         return;
     }
-    for (size_t i = 0; i < server->users.size; i ++) {
+    for (size_t i = 0; i < server->users.size; i++) {
         if (strcmp(name, server->users.arr[i].name) == 0)
             loged = &server->users.arr[i];
     }

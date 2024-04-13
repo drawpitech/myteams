@@ -17,7 +17,6 @@
 #include <unistd.h>
 
 #include "client.h"
-#include "utils.h"
 
 /**
  * @brief Append an element to an array.
