@@ -48,14 +48,14 @@ static void assign_user(client_t *client, user_t *user)
 
     client->user = user;
     uuid_unparse(user->uuid, uuid_str);
-    DEBUG("User %s <%s> created", client->user->name, uuid_str);
+    DEBUG("User %s <%s> logged", client->user->name, uuid_str);
     server_event_user_logged_in(uuid_str);
 }
 
 void cmd_login(server_t *server, client_t *client)
 {
-    int ag = 0;
-    char *name = get_arg(client->buffer, 0, &ag);
+    size_t ag = 0;
+    char *name = get_quoted_arg(client->buffer, 0, &ag);
     user_t *user = NULL;
 
     if (name == NULL) {
