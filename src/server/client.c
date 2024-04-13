@@ -24,14 +24,14 @@ void client_init(client_t *client, int fd)
     client->fd = fd;
     client->buffer[0] = '\0';
     client->user = NULL;
-    DEBUG_MSG("Client connected\n");
+    DEBUG_MSG("Client connected");
 }
 
 void client_disconnect(client_t *client)
 {
     close(client->fd);
     client->fd = -1;
-    DEBUG_MSG("Client disconnected\n");
+    DEBUG_MSG("Client disconnected");
 }
 
 static void client_process_message(

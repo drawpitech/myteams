@@ -14,7 +14,7 @@ char *get_arg(char *buff, int start, int *end)
     int i = start;
     int j = 0;
 
-    if (!buff)
+    if (buff == NULL)
         return NULL;
     while (buff[i] && buff[i] != '"')
         i++;
@@ -26,6 +26,7 @@ char *get_arg(char *buff, int start, int *end)
     if (buff[i + j] == '\0')
         return NULL;
     buff[i + j] = '\0';
-    *end = i + j;
+    if (end != NULL)
+        *end = i + j;
     return buff + i;
 }
