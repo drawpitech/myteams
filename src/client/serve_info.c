@@ -39,7 +39,7 @@ run_state_t get_serv_info(connection_t *connect)
 
     if (get_info_type(connect, code, 3) != SUCCESS) {
         dprintf(STDERR_FILENO, "Error: didn't manage to read from server.\n");
-        return running;
+        return cli_exit;
     }
     for (size_t i = 0; i < LEN_OF(func_code_tab); i++) {
         if (strncmp(func_code_tab[i].code, code, 3) == 0){
