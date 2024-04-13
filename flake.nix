@@ -9,12 +9,13 @@
       pkgs = inputs.nixpkgs.legacyPackages.${system};
       cc = pkgs.gcc12;
 
-      deriv = name: inputs:
-        pkgs.stdenv.mkDerivation {
+      deriv = name:
+        pkgs.stdenv.mkDerivation rec {
           inherit name;
           src = ./.;
 
-          buildInputs = [cc] ++ (with pkgs; [glibc gnumake pkg-config libuuid]) ++ inputs;
+          buildInputs = with pkgs; [glibc gnumake pkg-config libuuid];
+          nativeBuildInputs = [pkgs.makeWrapper];
           makeFlags = ["CC=${cc}/bin/gcc"];
           hardeningDisable = ["format" "fortify"];
           enableParallelBuilding = true;
@@ -25,6 +26,9 @@
           installPhase = ''
             mkdir -p $out/bin
             cp ${name} $out/bin
+          '';
+          postFixup = ''
+            wrapProgram $out/bin/${name} --set LD_LIBRARY_PATH ${./libs/myteams}
           '';
         };
     in rec {
@@ -44,8 +48,8 @@
       };
 
       packages = {
-        server = deriv "myteams_server" [];
-        client = deriv "myteams_cli" [];
+        server = deriv "myteams_server";
+        client = deriv "myteams_cli";
       };
     });
 }
