@@ -38,4 +38,3 @@ static const struct cmd_s {
 };
 
 void exec_command(server_t *server, client_t *client);
-char *get_quoted_arg(char *buff, size_t start, size_t *end);

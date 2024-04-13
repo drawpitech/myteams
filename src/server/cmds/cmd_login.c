@@ -11,22 +11,11 @@
 #include <unistd.h>
 #include <uuid/uuid.h>
 
+#include "cmds_utils.h"
 #include "command.h"
 #include "debug.h"
 #include "ressources_infos.h"
 #include "server.h"
-
-static void broadcast_user_info(server_t *server, client_t *client, char *code)
-{
-    user_info_t info = {0};
-
-    strcpy(info.user_name, client->user->name);
-    uuid_copy(info.user_uuid, client->user->uuid);
-    for (size_t i = 0; i < server->clients.size; i++) {
-        write(server->clients.arr[i].fd, code, strlen(code));
-        write(server->clients.arr[i].fd, &info, sizeof info);
-    }
-}
 
 static void create_user(server_t *server, client_t *client, char *name)
 {
@@ -52,35 +41,31 @@ static void assign_user(client_t *client, user_t *user)
     server_event_user_logged_in(uuid_str);
 }
 
+static user_t *get_user_by_name(server_t *server, char *name)
+{
+    for (size_t i = 0; i < server->users.size; i++)
+        if (strcmp(name, server->users.arr[i].name) == 0)
+            return &server->users.arr[i];
+    return NULL;
+}
+
 void cmd_login(server_t *server, client_t *client)
 {
     size_t ag = 0;
     char *name = get_quoted_arg(client->buffer, 0, &ag);
     user_t *user = NULL;
+    user_info_t info = {0};
 
     if (name == NULL) {
         dprintf(client->fd, "503 Syntax error.\n");
         return;
     }
-    for (size_t i = 0; i < server->users.size; i++) {
-        if (strcmp(name, server->users.arr[i].name) == 0) {
-            user = &server->users.arr[i];
-            break;
-        }
-    }
+    user = get_user_by_name(server, name);
     if (user != NULL)
         assign_user(client, user);
     else
         create_user(server, client, name);
-    broadcast_user_info(server, client, "311");
-}
-
-void cmd_logout(server_t *server, client_t *client)
-{
-    char uuid_str[37] = {0};
-
-    uuid_unparse(client->thread_uuid, uuid_str);
-    server_event_user_logged_out(uuid_str);
-    broadcast_user_info(server, client, "312");
-    client->user = NULL;
+    strcpy(info.user_name, client->user->name);
+    uuid_copy(info.user_uuid, client->user->uuid);
+    broadcast(server, "311", &info, sizeof info);
 }
