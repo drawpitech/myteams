@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_teams
 ** File description:
-** login
+** cmd_login
 */
 
 #include <myteams/logging_server.h>

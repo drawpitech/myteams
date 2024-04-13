@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_teams
 ** File description:
-** cmds
+** cmds_utils
 */
 
 #include "cmds_utils.h"
