@@ -19,7 +19,7 @@ LDFLAGS :=
 LDLIBS := -luuid
 
 # ↓ myteams lib
-CFLAGS += -I../../libs/myteams
+CFLAGS += -isystem ../../libs
 LDFLAGS += -L../../libs/myteams
 LDLIBS += -lmyteams
 

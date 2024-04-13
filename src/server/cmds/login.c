@@ -5,6 +5,7 @@
 ** login
 */
 
+#include <myteams/logging_server.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -13,7 +14,6 @@
 #include "command.h"
 #include "ressources_infos.h"
 #include "server.h"
-#include "../libs/myteams/logging_server.h"
 
 static void send_info(server_t *server, client_t *client, char *code)
 {
