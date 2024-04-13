@@ -5,26 +5,28 @@
 ** parse
 */
 
-#include "command.h"
 #include <stddef.h>
+#include <string.h>
 
-char *get_arg(char *buff, int start, int *end)
+#include "command.h"
+
+char *get_quoted_arg(char *buff, size_t start, size_t *end)
 {
-    int i = start;
-    int j = 0;
+    char *begin = NULL;
+    char *end_ptr = NULL;
 
-    if (!buff)
+    if (buff == NULL)
         return NULL;
-    while (buff[i] && buff[i] != '"')
-        i ++;
-    if (buff[i] == '\0' || buff[i + 1] == '\0')
+    buff += start;
+    begin = strchr(buff, '"');
+    if (begin == NULL)
         return NULL;
-    i ++;
-    while (buff[i + j] && buff[i + j] != '"')
-        j ++;
-    if (buff[i + j] == '\0')
+    begin += 1;
+    end_ptr = strchr(begin, '"');
+    if (end_ptr == NULL)
         return NULL;
-    buff[i + j] = '\0';
-    *end = i + j;
-    return buff + i;
+    *end_ptr = '\0';
+    if (end != NULL)
+        *end = buff - end_ptr;
+    return begin;
 }

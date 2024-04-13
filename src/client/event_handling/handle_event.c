@@ -7,9 +7,9 @@
 
 #include "handle_event.h"
 
+#include <myteams/logging_client.h>
 #include <uuid/uuid.h>
 
-#include "../libs/myteams/logging_client.h"
 #include "client.h"
 #include "ressources_infos.h"
 #include "run_client.h"
