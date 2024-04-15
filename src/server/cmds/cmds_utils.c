@@ -17,8 +17,7 @@ char *get_quoted_arg(char *buff, size_t start, size_t *end)
 
     if (buff == NULL)
         return NULL;
-    buff += start;
-    begin = strchr(buff, '"');
+    begin = strchr(buff + start, '"');
     if (begin == NULL)
         return NULL;
     begin += 1;

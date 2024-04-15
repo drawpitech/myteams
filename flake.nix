@@ -38,6 +38,7 @@
         packages =
           packages.server.buildInputs
           ++ (with pkgs; [
+            python312
             criterion
             gcovr
             valgrind
