@@ -10,6 +10,7 @@
 #include "server.h"
 #include <stddef.h>
 #include <string.h>
+#include "ressources_infos.h"
 
 char *get_quoted_arg(char *buff, size_t start, size_t *end)
 {
@@ -48,4 +49,14 @@ bool is_logged_in(client_t *client)
         return false;
     }
     return true;
+}
+
+user_info_t *user_to_info(user_t *user, user_info_t *info)
+{
+    if (user == NULL || info == NULL)
+        return NULL;
+    memset(info, 0, sizeof *info);
+    strcpy(info->user_name, user->name);
+    uuid_copy(info->user_uuid, user->uuid);
+    return info;
 }

@@ -8,24 +8,27 @@
 #include <string.h>
 #include <uuid/uuid.h>
 
+#include "cmds/cmds_utils.h"
 #include "command.h"
+#include "ressources_infos.h"
 
 void cmd_user(server_t *server, client_t *client)
 {
-    char uuid_str[37];
     user_t *user = NULL;
     uuid_t uuid;
+    user_info_t info;
+    char *arg = get_quoted_arg(client->buffer, 0, NULL);
 
-    if (strlen(client->buffer) != 36) {
-        dprintf(client->fd, "500\n");
+    if (arg == NULL) {
+        write(client->fd, "500\n", 4);
         return;
     }
-    uuid_parse(client->buffer, uuid);
+    uuid_parse(arg, uuid);
     user = get_user_by_uuid(server, uuid);
-    uuid_unparse(uuid, uuid_str);
     if (user == NULL) {
-        dprintf(client->fd, "500\n");
+        write(client->fd, "500\n", 4);
         return;
     }
-    dprintf(client->fd, "200 <%s> \"%s\"\n", uuid_str, user->name);
+    write(client->fd, "200 ", 4);
+    write(client->fd, user_to_info(user, &info), sizeof info);
 }
