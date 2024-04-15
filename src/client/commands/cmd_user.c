@@ -19,7 +19,7 @@
 int cmd_user(connection_t *connect, const char *cmd, const cmd_conv_t *command)
 {
     user_info_t info = {0};
-    char code[4] = {0};
+    char code[3] = {0};
     char uuid[37] = {0};
 
     dprintf(
@@ -27,7 +27,7 @@ int cmd_user(connection_t *connect, const char *cmd, const cmd_conv_t *command)
     if (read(connect->servfd, code, sizeof code) != sizeof code)
         return ERROR;
     DEBUG("/user ret: %.3s", code);
-    if (strncmp(code, "200", 3) != 0) {
+    if (strncmp(code, "215", sizeof code) != 0) {
         printf("Server returned: %.3s\n", code);
         return SUCCESS;
     }

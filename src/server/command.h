@@ -9,10 +9,10 @@
 
 #include "server.h"
 
-void cmd_user(server_t *server, client_t *client);
+void cmd_create(server_t *server, client_t *client);
 void cmd_login(server_t *server, client_t *client);
 void cmd_logout(server_t *server, client_t *client);
-void cmd_create(server_t *server, client_t *client);
+void cmd_user(server_t *server, client_t *client);
 
 static const struct cmd_s {
     char *name;
