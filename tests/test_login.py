@@ -1,10 +1,10 @@
-from server import run_server
+from server import run_teams
 from pprint import pprint
 
 
 def test_login():
     name = "bob"
-    serv, cli = run_server([
+    serv, cli = run_teams([
         f'/login "{name}"\n',
     ])
     pprint(serv)
@@ -21,7 +21,7 @@ def test_login():
 
 def test_logout():
     name = "bob"
-    serv, cli = run_server([
+    serv, cli = run_teams([
         f'/login "{name}"\n',
         '/logout\n',
     ])

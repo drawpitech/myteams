@@ -7,7 +7,7 @@ import time
 OUTPUT = list[list[str]]
 
 
-def run_server(cmds: list[str]) -> tuple[OUTPUT, OUTPUT]:
+def run_teams(cmds: list[str]) -> tuple[OUTPUT, OUTPUT]:
     port = find_available_port()
     print(f"Using port: {port}")
     path = pathlib.Path(__file__).parent.resolve()
