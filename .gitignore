@@ -1,7 +1,7 @@
 # Binaries
 *.out
-/myteams_cli
-/myteams_server
+myteams_cli
+myteams_server
 /src/*/tests
 /src/*/asan
 /src/*/prof

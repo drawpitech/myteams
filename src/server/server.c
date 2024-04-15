@@ -34,19 +34,20 @@
  */
 void append_to_array(void *array, size_t size, void *elem)
 {
-    size_t *d = array;
-    size_t *nmemb = &d[0];
-    size_t *alloc = &d[1];
-    uint8_t **arr = (uint8_t **)&(d[2]);
+    struct {
+        size_t size;
+        size_t alloc;
+        uint8_t *array;
+    } *arr = array;
 
-    if (*nmemb + 1 > *alloc) {
-        *alloc = (*alloc) ? *alloc * *alloc : 2;
-        *arr = reallocarray(*arr, *alloc + 1, size);
-        if (*arr == NULL)
+    if (arr->size + 1 > arr->alloc) {
+        arr->alloc = (arr->alloc) ? arr->alloc * arr->alloc : 2;
+        arr->array = reallocarray(arr->array, arr->alloc + 1, size);
+        if (arr->array == NULL)
             exit(0);
     }
-    memcpy(*arr + (*nmemb * size), elem, size);
-    *nmemb += 1;
+    memcpy(arr->array + (arr->size * size), elem, size);
+    arr->size += 1;
 }
 
 static bool new_client(server_t *serv, client_t *client)
