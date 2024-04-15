@@ -5,21 +5,27 @@
 ** debug
 */
 
-#ifndef DEBUG_H_
-    #define DEBUG_H_
+#pragma once
 
-    #define NOTHING /* Nothing */
+#include "utils.h"
 
-    #ifdef DEBUG_MODE
-        #define FORMAT(s) "%s:%d: " s "\n"
-        #define HEAD __FILE_NAME__, __LINE__
-        #define DEBUG_DO(code) (code)
-    #else
-        #define DEBUG_DO(code) NOTHING
-    #endif
+#define NOTHING /* Nothing */
 
-    #define DEBUG(fmt, ...)   DEBUG_DO(printf(FORMAT(fmt), HEAD, __VA_ARGS__))
-    #define DEBUGV(fmt, va)   DEBUG_DO(vprintf(FORMAT(fmt), HEAD, (va)))
-    #define DEBUG_MSG(string) DEBUG_DO(printf(FORMAT(string), HEAD))
+#ifdef DEBUG_MODE
+    #define FORMAT(s) "%s:%d: " s "\n"
+    #define HEAD __FILE_NAME__, __LINE__
+    #define DEBUG_DO(code) (code)
+#else
+    #define DEBUG_DO(code) NOTHING
+#endif
 
-#endif /* DEBUG_H_ */
+#define DEBUG(fmt, ...)   DEBUG_DO(printf(FORMAT(fmt), HEAD, __VA_ARGS__))
+#define DEBUGV(fmt, va)   DEBUG_DO(vprintf(FORMAT(fmt), HEAD, (va)))
+#define DEBUG_MSG(string) DEBUG_DO(printf(FORMAT(string), HEAD))
+
+// Avoid unused variable/functions warning
+#ifdef DEBUG_MODE
+    #define DEBUG_USED
+#else
+    #define DEBUG_USED UNUSED
+#endif

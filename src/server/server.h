@@ -83,6 +83,11 @@ typedef struct {
     team_t *team;
     channel_t *channel;
     thread_t *thread;
+    struct {
+        uuid_t team;
+        uuid_t channel;
+        uuid_t thread;
+    } uuid;
 } client_t;
 
 typedef struct {
@@ -113,5 +118,9 @@ typedef struct {
 int myteams_server(int argc, char **argv);
 
 user_t *get_user_by_uuid(server_t *server, uuid_t uuid);
+team_t *get_team_by_uuid(server_t *server, uuid_t uuid);
+channel_t *get_channel_by_uuid(team_t *team, uuid_t uuid);
+thread_t *get_thread_by_uuid(channel_t *channel, uuid_t uuid);
+
 void append_to_array(void *array, size_t size, void *elem);
 void handle_sigint(int sig);
