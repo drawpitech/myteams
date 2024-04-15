@@ -9,6 +9,7 @@
 
 #include <netinet/in.h>
 #include <netinet/ip.h>
+#include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -132,6 +133,8 @@ int myteams_server(int argc, char **argv)
 
     if (!parse_args(&serv, argc, argv) || !open_server(&serv))
         return 84;
+    signal(SIGINT, handle_sigint);
+    signal(SIGTERM, handle_sigint);
     printf("Server running on port %d\n", serv.port);
     for (client_t client = {0};;) {
         if (new_client(&serv, &client))

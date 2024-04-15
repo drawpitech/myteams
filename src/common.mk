@@ -27,6 +27,7 @@ LDLIBS += -lmyteams
 NAME ?= a.out
 ASAN_NAME := asan
 PROF_NAME := prof
+TEST_NAME := tests
 
 CFLAGS += -D PROG=$(NAME)
 
@@ -39,6 +40,7 @@ BUILD_DIR := .build
 OBJ := $(SRC:%.c=$(BUILD_DIR)/source/%.o)
 ASAN_OBJ := $(SRC:%.c=$(BUILD_DIR)/asan/%.o)
 PROF_OBJ := $(SRC:%.c=$(BUILD_DIR)/prof/%.o)
+TEST_OBJ := $(SRC:%.c=$(BUILD_DIR)/tests/%.o)
 
 # ↓ Dependencies for headers
 DEPS_FLAGS := -MMD -MP
@@ -78,14 +80,19 @@ $(BUILD_DIR)/tests/%.o: %.c
 	@ $(ECHO) "[${C_BOLD}${C_RED}CC${C_RESET}] $^"
 	@ $(CC) -o $@ -c $< $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
+$(TEST_NAME): LDLIBS += --coverage
+$(TEST_NAME): $(TEST_OBJ)
+	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CC${C_RESET}] ${C_GREEN}$@${C_RESET}"
+	@ $(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) || $(DIE)
+
 # ↓ Asan
 $(BUILD_DIR)/asan/%.o: %.c
 	@ mkdir -p $(dir $@)
 	@ $(ECHO) "[${C_BOLD}${C_RED}CC${C_RESET}] $^"
 	@ $(CC) -o $@ -c $< $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
-$(ASAN_NAME): LDFLAGS += -fsanitize=address,leak,undefined -g3
-$(ASAN_NAME): LDFLAGS += -fanalyzer
+$(ASAN_NAME): LDLIBS += -fsanitize=address,leak,undefined -g3
+$(ASAN_NAME): LDLIBS += -fanalyzer
 $(ASAN_NAME): CFLAGS += -D DEBUG_MODE
 $(ASAN_NAME): $(ASAN_OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CC${C_RESET}] ${C_GREEN}$@${C_RESET}"

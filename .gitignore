@@ -1,10 +1,10 @@
 # Binaries
 *.out
-myteams_cli
-myteams_server
-unit_tests
-asan
-prof
+/myteams_cli
+/myteams_server
+/src/*/tests
+/src/*/asan
+/src/*/prof
 
 # Compilation
 .build/

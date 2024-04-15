@@ -8,6 +8,7 @@
     inputs.utils.lib.eachDefaultSystem (system: let
       pkgs = inputs.nixpkgs.legacyPackages.${system};
       cc = pkgs.gcc12;
+      python = pkgs.python311;
 
       deriv = name:
         pkgs.stdenv.mkDerivation rec {
@@ -43,8 +44,15 @@
             valgrind
             bear
             gdb
-          ]);
+          ])
+          ++ [python]
+          ++ (with python.pkgs; [venvShellHook black]);
         LD_LIBRARY_PATH = ["./libs/myteams"];
+
+        venvDir = ".venv";
+        postVenvCreation = ''
+          pip install -r ${./tests/requirements.txt}
+        '';
       };
 
       packages = {

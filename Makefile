@@ -40,7 +40,13 @@ asan: all
 .PHONY: prof
 prof: SERVER_TARGET := prof
 prof: CLIENT_TARGET := prof
-prof: prof
+prof: all
+
+.PHONY: tests
+tests: SERVER_TARGET := tests
+tests: CLIENT_TARGET := tests
+tests: all
+	@ pytest -n 4
 
 # ↓ Cleaning
 .PHONY: clean
