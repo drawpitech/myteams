@@ -56,7 +56,18 @@ user_info_t *user_to_info(user_t *user, user_info_t *info)
     if (user == NULL || info == NULL)
         return NULL;
     memset(info, 0, sizeof *info);
-    strcpy(info->user_name, user->name);
+    strcpy(info->name, user->name);
     uuid_copy(info->user_uuid, user->uuid);
+    return info;
+}
+
+team_info_t *team_to_info(team_t *team, team_info_t *info)
+{
+    if (team == NULL || info == NULL)
+        return NULL;
+    memset(info, 0, sizeof *info);
+    strcpy(info->description, team->description);
+    strcpy(info->name, team->name);
+    uuid_copy(info->uuid, team->uuid);
     return info;
 }

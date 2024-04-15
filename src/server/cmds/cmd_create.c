@@ -30,15 +30,13 @@ static void create_new_team(
     if (!name || !description)
         return;
     strcpy(new_team.name, name);
-    strcpy(info.name, name);
     strcpy(new_team.description, description);
-    strcpy(info.description, description);
     uuid_generate(new_team.uuid);
     uuid_unparse(new_team.uuid, team_uuid_str);
     uuid_unparse(client->user->uuid, client_uuid_str);
-    uuid_copy(info.uuid, new_team.uuid);
     append_to_array(&server->teams, sizeof(team_t), &new_team);
     server_event_team_created(team_uuid_str, new_team.name, client_uuid_str);
+    team_to_info(&new_team, &info);
     write(client->fd, "211", 4);
     write(client->fd, &info, sizeof(info));
     broadcast(server, "341", &info, sizeof(info));

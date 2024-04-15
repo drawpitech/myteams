@@ -34,6 +34,6 @@ int cmd_user(connection_t *connect, const char *cmd, const cmd_conv_t *command)
     if (read(connect->servfd, &info, sizeof info) != sizeof info)
         return ERROR;
     uuid_unparse(info.user_uuid, uuid);
-    client_print_user(uuid, info.user_name, 0);
+    client_print_user(uuid, info.name, 0);
     return SUCCESS;
 }
