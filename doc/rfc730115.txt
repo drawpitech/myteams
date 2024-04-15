@@ -171,7 +171,7 @@ Such as:
 
         501 -> Unrecognised command
 
-        503 -> syntax error
+        502 -> syntax error
 
         503 -> not implemented (reply when a command is not implemented)
 

@@ -12,13 +12,14 @@
 void cmd_user(server_t *server, client_t *client);
 void cmd_login(server_t *server, client_t *client);
 void cmd_logout(server_t *server, client_t *client);
+void cmd_create(server_t *server, client_t *client);
 
 static const struct cmd_s {
     char *name;
     void (*func)(server_t *server, client_t *client);
     char *description;
 } COMMANDS[] = {
-    {"CREATE", NULL, "based on the context, create the sub resource"},
+    {"CREATE", cmd_create, "based on the context, create the sub resource"},
     {"HELP", NULL, "show help information"},
     {"INFO", NULL,
         "based on the context, display details of the current resource"},

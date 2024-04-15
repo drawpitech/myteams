@@ -80,9 +80,9 @@ typedef struct {
     socklen_t len;
     user_t *user;
     char buffer[BUFSIZ];
-    uuid_t team_uuid;
-    uuid_t channel_uuid;
-    uuid_t thread_uuid;
+    team_t *team;
+    channel_t *channel;
+    thread_t *thread;
 } client_t;
 
 typedef struct {

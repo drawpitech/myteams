@@ -6,6 +6,7 @@
 */
 
 #include <myteams/logging_client.h>
+#include <stdio.h>
 #include <uuid/uuid.h>
 
 #include "client.h"
@@ -21,9 +22,9 @@ int receive_created_teams(connection_t *connect)
 
     if (get_info_type(connect, &team_info, sizeof(team_info)) != SUCCESS)
         return ERROR;
-    uuid_unparse(team_info.team_uuid, uuid_str);
+    uuid_unparse(team_info.uuid, uuid_str);
     client_event_team_created(
-        uuid_str, team_info.team_name, team_info.team_description);
+        uuid_str, team_info.name, team_info.description);
     return SUCCESS;
 }
 
@@ -34,9 +35,9 @@ int receive_created_channel(connection_t *connect)
 
     if (get_info_type(connect, &channel_info, sizeof(channel_info)) != SUCCESS)
         return ERROR;
-    uuid_unparse(channel_info.channel_uuid, uuid_str);
+    uuid_unparse(channel_info.uuid, uuid_str);
     client_event_channel_created(
-        uuid_str, channel_info.channel_name, channel_info.channel_description);
+        uuid_str, channel_info.name, channel_info.description);
     return SUCCESS;
 }
 
@@ -51,7 +52,7 @@ int receive_created_thread(connection_t *connect)
     uuid_unparse(thread_info.user_uuid, user_uuid_str);
     uuid_unparse(thread_info.thread_uuid, thread_uuid_str);
     client_event_thread_created(
-        thread_uuid_str, user_uuid_str, thread_info.thread_timestamp,
-        thread_info.thread_title, thread_info.thread_body);
+        thread_uuid_str, user_uuid_str, thread_info.timestamp,
+        thread_info.title, thread_info.body);
     return SUCCESS;
 }
