@@ -7,6 +7,7 @@
 
 #include "cmds_utils.h"
 
+#include "server.h"
 #include <stddef.h>
 #include <string.h>
 
@@ -26,7 +27,7 @@ char *get_quoted_arg(char *buff, size_t start, size_t *end)
         return NULL;
     *end_ptr = '\0';
     if (end != NULL)
-        *end = buff - end_ptr;
+        *end = end_ptr - buff;
     return begin;
 }
 
@@ -38,4 +39,13 @@ void broadcast(server_t *server, char *code, void *msg, size_t size)
         write(server->clients.arr[i].fd, code, strlen(code));
         write(server->clients.arr[i].fd, msg, size);
     }
+}
+
+bool is_logged_in(client_t *client)
+{
+    if (!client->user) {
+        dprintf(client->fd, "520\n");
+        return false;
+    }
+    return true;
 }

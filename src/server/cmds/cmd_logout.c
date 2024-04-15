@@ -23,7 +23,7 @@ void cmd_logout(server_t *server, client_t *client)
         return;
     uuid_unparse(client->user->uuid, uuid_str);
     server_event_user_logged_out(uuid_str);
-    strcpy(info.user_name, client->user->name);
+    strcpy(info.name, client->user->name);
     uuid_copy(info.user_uuid, client->user->uuid);
     broadcast(server, "312", &info, sizeof info);
     client->user = NULL;

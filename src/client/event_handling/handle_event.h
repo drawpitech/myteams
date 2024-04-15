@@ -32,3 +32,24 @@ static const func_code_t func_code_tab[] = {
     {"342", &receive_created_channel},
     {"343", &receive_created_thread},
 };
+
+int standard_error(connection_t *connect);
+int unknown_team(connection_t *connect);
+int unknown_channel(connection_t *connect);
+int unknown_thread(connection_t *connect);
+int unknown_user(connection_t *connect);
+
+int error_unauthorized(connection_t *connect);
+int error_already_exist(connection_t *connect);
+
+static const func_code_t error_code_tab[] = {
+    {"501", &standard_error},
+    {"502", &standard_error},
+    {"503", &standard_error},
+    {"511", &unknown_team},
+    {"512", &unknown_channel},
+    {"513", &unknown_thread},
+    {"514", &unknown_user},
+    {"520", &error_unauthorized},
+    {"530", &error_already_exist},
+};

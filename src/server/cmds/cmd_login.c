@@ -65,7 +65,7 @@ void cmd_login(server_t *server, client_t *client)
         assign_user(client, user);
     else
         create_user(server, client, name);
-    strcpy(info.user_name, client->user->name);
+    strcpy(info.name, client->user->name);
     uuid_copy(info.user_uuid, client->user->uuid);
     broadcast(server, "311", &info, sizeof info);
 }
