@@ -40,6 +40,7 @@ BUILD_DIR := .build
 OBJ := $(SRC:%.c=$(BUILD_DIR)/source/%.o)
 ASAN_OBJ := $(SRC:%.c=$(BUILD_DIR)/asan/%.o)
 PROF_OBJ := $(SRC:%.c=$(BUILD_DIR)/prof/%.o)
+TEST_OBJ := $(SRC:%.c=$(BUILD_DIR)/tests/%.o)
 
 # ↓ Dependencies for headers
 DEPS_FLAGS := -MMD -MP
@@ -80,7 +81,7 @@ $(BUILD_DIR)/tests/%.o: %.c
 	@ $(CC) -o $@ -c $< $(LDLIBS) $(CFLAGS) $(DEPS_FLAGS) || $(DIE)
 
 $(TEST_NAME): LDLIBS += --coverage
-$(TEST_NAME): $(OBJ)
+$(TEST_NAME): $(TEST_OBJ)
 	@ $(ECHO) "[${C_BOLD}${C_YELLOW}CC${C_RESET}] ${C_GREEN}$@${C_RESET}"
 	@ $(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) || $(DIE)
 
