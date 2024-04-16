@@ -51,7 +51,7 @@ thread_t *get_thread_by_uuid(channel_t *channel, uuid_t uuid)
 
     for (size_t i = 0; i < channel->threads.size; i++) {
         thread = &channel->threads.arr[i];
-        if (memcmp(thread->uuid, uuid, sizeof(uuid_t)) == 0)
+        if (memcmp(thread->thread_uuid, uuid, sizeof(uuid_t)) == 0)
             return thread;
     }
     return NULL;
