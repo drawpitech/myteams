@@ -13,7 +13,7 @@
 #include "handle_event.h"
 #include "utils.h"
 
-int standard_error(UNUSED connection_t *connect)
+int standard_error(connection_t *connect)
 {
     char c = '\0';
 

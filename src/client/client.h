@@ -9,9 +9,17 @@
 
 #include <netinet/in.h>
 
+enum command_type {
+    create,
+    subscribe,
+    unsubscribe,
+    other,
+};
+
 typedef struct connection_s {
     int servfd;
     struct sockaddr_in sockaddr;
+    enum command_type last_cmd;
 } connection_t;
 
 int myteams_cli(int argc, char **argv);

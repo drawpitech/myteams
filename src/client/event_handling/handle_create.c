@@ -6,7 +6,6 @@
 */
 
 #include <myteams/logging_client.h>
-#include <stdio.h>
 #include <uuid/uuid.h>
 
 #include "client.h"

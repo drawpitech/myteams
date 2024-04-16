@@ -96,22 +96,40 @@ Such as:
 
     20x -> Generic SUCCESS
 
-    21x -> Give a list of ressource.
+    21x -> Give an individual ressource.
         All the 21x response should be constructed on this base :
-            21x [nb] *[resource]
+            21x [resource]
         where [nb] is the number of resource following in the message.
 
-        211 -> Gives a list of teams
+        211 -> Gives a team
 
-        212 -> Gives a list of channels
+        212 -> Gives a channel
 
-        213 -> Gives a list of threads
+        213 -> Gives a thread
 
-        214 -> Gives a list of replies
+        214 -> Gives a reply
 
-        215 -> Gives a list of users
+        215 -> Gives a user
 
-        216 -> Gives a list of messages
+        216 -> Gives a message
+
+
+    22x -> Give a list of ressource.
+        All the 22x response should be constructed on this base :
+            22x [nb] *[resource]
+        where [nb] is the number of resource following in the message.
+
+        221 -> Gives a list of teams
+
+        222 -> Gives a list of channels
+
+        223 -> Gives a list of threads
+
+        224 -> Gives a list of replies
+
+        225 -> Gives a list of users
+
+        226 -> Gives a list of messages
 
 
 
