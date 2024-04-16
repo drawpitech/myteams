@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <time.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
 
@@ -23,9 +24,11 @@ typedef struct {
 } comment_t;
 
 typedef struct {
-    uuid_t uuid;
+    uuid_t thread_uuid;
+    uuid_t author_uuid;
+    time_t timestamp;
     char title[MAX_NAME_LENGTH];
-    char message[MAX_BODY_LENGTH];
+    char body[MAX_BODY_LENGTH];
     struct {
         size_t size;
         size_t alloc;

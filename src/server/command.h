@@ -14,6 +14,7 @@ void cmd_login(server_t *server, client_t *client);
 void cmd_logout(server_t *server, client_t *client);
 void cmd_use(server_t *server, client_t *client);
 void cmd_user(server_t *server, client_t *client);
+void cmd_list(server_t *server, client_t *client);
 
 static const struct cmd_s {
     char *name;
@@ -24,7 +25,7 @@ static const struct cmd_s {
     {"HELP", NULL, "show help information"},
     {"INFO", NULL,
         "based on the context, display details of the current resource"},
-    {"LIST", NULL, "based on the context, list all the sub resources"},
+    {"LIST", cmd_list, "based on the context, list all the sub resources"},
     {"LOGIN", cmd_login, "set the user_name used by client"},
     {"LOGOUT", cmd_logout, "disconnect the client from the server"},
     {"MESSAGES", NULL, "list all messages exchanged with the specified user"},
