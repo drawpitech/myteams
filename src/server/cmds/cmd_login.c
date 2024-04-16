@@ -20,7 +20,7 @@
 static user_t *create_user(server_t *server, client_t *client, char *name)
 {
     user_t new = {0};
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     strcpy(new.name, name);
     uuid_generate(new.uuid);
@@ -37,7 +37,7 @@ static user_t *create_user(server_t *server, client_t *client, char *name)
 
 static void assign_user(client_t *client, user_t *user)
 {
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     client->user = user;
     uuid_unparse(user->uuid, uuid_str);

@@ -17,7 +17,7 @@
 
 int unknown_team(connection_t *connect)
 {
-    char uuid[37] = {0};
+    char uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &uuid, sizeof(uuid)) != SUCCESS)
         return ERROR;
@@ -27,7 +27,7 @@ int unknown_team(connection_t *connect)
 
 int unknown_channel(connection_t *connect)
 {
-    char uuid[37] = {0};
+    char uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &uuid, sizeof(uuid)) != SUCCESS)
         return ERROR;
@@ -37,7 +37,7 @@ int unknown_channel(connection_t *connect)
 
 int unknown_thread(connection_t *connect)
 {
-    char uuid[37] = {0};
+    char uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &uuid, sizeof(uuid)) != SUCCESS)
         return ERROR;
@@ -47,7 +47,7 @@ int unknown_thread(connection_t *connect)
 
 int unknown_user(connection_t *connect)
 {
-    char uuid[37] = {0};
+    char uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &uuid, sizeof(uuid)) != SUCCESS)
         return ERROR;

@@ -30,7 +30,7 @@ int reply_l_team(connection_t *connect)
 {
     team_info_t info = {0};
     size_t nb_elt = 0;
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
@@ -47,7 +47,7 @@ int reply_l_channel(connection_t *connect)
 {
     channel_info_t info = {0};
     size_t nb_elt = 0;
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
@@ -64,8 +64,8 @@ int reply_l_threads(connection_t *connect)
 {
     thread_info_t info = {0};
     size_t nb_elt = 0;
-    char user_uuid[37] = {0};
-    char thread_uuid[37] = {0};
+    char user_uuid[UUID_STR_LEN] = {0};
+    char thread_uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
@@ -84,8 +84,8 @@ int reply_l_replies(connection_t *connect)
 {
     reply_info_t info = {0};
     size_t nb_elt = 0;
-    char user_uuid[37] = {0};
-    char thread_uuid[37] = {0};
+    char user_uuid[UUID_STR_LEN] = {0};
+    char thread_uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;

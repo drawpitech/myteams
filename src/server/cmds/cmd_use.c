@@ -25,6 +25,8 @@ static void set_team(server_t *server, client_t *client, char **ptr)
     uuid_parse(*ptr, uuid);
     ptr += end + 1;
     memcpy(client->uuid.team, uuid, sizeof uuid);
+    if (uuid_is_null(client->uuid.team))
+        client->uuid.team[0] = 1;
     client->team = get_team_by_uuid(server, uuid);
 }
 
@@ -60,7 +62,7 @@ static void set_thread(UNUSED server_t *server, client_t *client, char **ptr)
 
 DEBUG_USED static void debug_cmd_use(client_t *client)
 {
-    char uuid[37] = {0};
+    char uuid[UUID_STR_LEN] = {0};
 
     uuid_unparse(client->uuid.team, uuid);
     DEBUG("Team: (%s) %p", uuid, (void *)client->team);
@@ -78,6 +80,9 @@ void cmd_use(server_t *server, client_t *client)
         return;
     ptr = client->buffer;
     memset(&client->uuid, 0, sizeof client->uuid);
+    client->team = NULL;
+    client->channel = NULL;
+    client->thread = NULL;
     set_team(server, client, &ptr);
     set_channel(server, client, &ptr);
     set_thread(server, client, &ptr);

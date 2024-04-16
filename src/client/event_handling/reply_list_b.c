@@ -19,7 +19,7 @@ int reply_l_users(connection_t *connect)
 {
     user_info_t info = {0};
     size_t nb_elt = 0;
-    char user_uuid[37] = {0};
+    char user_uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
@@ -36,7 +36,7 @@ int reply_l_messages(connection_t *connect)
 {
     message_info_t info = {0};
     size_t nb_elt = 0;
-    char sender_uuid[37] = {0};
+    char sender_uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;

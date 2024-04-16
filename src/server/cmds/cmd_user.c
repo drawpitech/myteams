@@ -15,7 +15,7 @@
 static user_t *get_user(server_t *server, client_t *client, uuid_t uuid)
 {
     user_t *user = get_user_by_uuid(server, uuid);
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     uuid_unparse(uuid, uuid_str);
     if (user != NULL)

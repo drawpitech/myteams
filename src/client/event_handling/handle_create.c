@@ -17,7 +17,7 @@
 int receive_created_teams(connection_t *connect)
 {
     team_info_t team_info = {0};
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &team_info, sizeof(team_info)) != SUCCESS)
         return ERROR;
@@ -30,7 +30,7 @@ int receive_created_teams(connection_t *connect)
 int receive_created_channel(connection_t *connect)
 {
     channel_info_t channel_info = {0};
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &channel_info, sizeof(channel_info)) != SUCCESS)
         return ERROR;
@@ -43,8 +43,8 @@ int receive_created_channel(connection_t *connect)
 int receive_created_thread(connection_t *connect)
 {
     thread_info_t thread_info = {0};
-    char user_uuid_str[37] = {0};
-    char thread_uuid_str[37] = {0};
+    char user_uuid_str[UUID_STR_LEN] = {0};
+    char thread_uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &thread_info, sizeof(thread_info)) != SUCCESS)
         return ERROR;

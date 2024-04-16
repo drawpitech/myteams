@@ -18,7 +18,7 @@
 int receive_login(connection_t *connect)
 {
     user_info_t user_info = {0};
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &user_info, sizeof(user_info)) != SUCCESS)
         return ERROR;
@@ -30,7 +30,7 @@ int receive_login(connection_t *connect)
 int receive_logout(connection_t *connect)
 {
     user_info_t user_info = {0};
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &user_info, sizeof(user_info)) != SUCCESS)
         return ERROR;
@@ -42,7 +42,7 @@ int receive_logout(connection_t *connect)
 int receive_message(connection_t *connect)
 {
     message_info_t message_info = {0};
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &message_info, sizeof(message_info)) != SUCCESS)
         return ERROR;
@@ -54,9 +54,9 @@ int receive_message(connection_t *connect)
 int receive_reply(connection_t *connect)
 {
     reply_info_t reply_info = {0};
-    char team_uuid_str[37] = {0};
-    char thread_uuid_str[37] = {0};
-    char user_uuid_str[37] = {0};
+    char team_uuid_str[UUID_STR_LEN] = {0};
+    char thread_uuid_str[UUID_STR_LEN] = {0};
+    char user_uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &reply_info, sizeof(reply_info)) != SUCCESS)
         return ERROR;

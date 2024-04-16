@@ -16,7 +16,7 @@
 
 void cmd_logout(server_t *server, client_t *client)
 {
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
     user_info_t info = {0};
 
     if (client->user == NULL)

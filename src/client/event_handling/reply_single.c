@@ -17,7 +17,7 @@
 int reply_s_team(connection_t *connect)
 {
     team_info_t info = {0};
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &info, sizeof(info)) != SUCCESS)
         return ERROR;
@@ -32,7 +32,7 @@ int reply_s_team(connection_t *connect)
 int reply_s_channel(connection_t *connect)
 {
     channel_info_t info = {0};
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &info, sizeof(info)) != SUCCESS)
         return ERROR;
@@ -47,8 +47,8 @@ int reply_s_channel(connection_t *connect)
 int reply_s_thread(connection_t *connect)
 {
     thread_info_t info = {0};
-    char uuid_str[37] = {0};
-    char user_uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
+    char user_uuid_str[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &info, sizeof(info)) != SUCCESS)
         return ERROR;
@@ -66,8 +66,8 @@ int reply_s_thread(connection_t *connect)
 int reply_s_reply(connection_t *connect)
 {
     reply_info_t info = {0};
-    char thread_uuid[37] = {0};
-    char user_uuid[37] = {0};
+    char thread_uuid[UUID_STR_LEN] = {0};
+    char user_uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &info, sizeof(info)) != SUCCESS)
         return ERROR;

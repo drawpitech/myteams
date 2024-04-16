@@ -23,8 +23,8 @@ static void create_new_team(
     const char description[])
 {
     team_t new_team = {0};
-    char team_uuid_str[37] = {0};
-    char client_uuid_str[37] = {0};
+    char team_uuid_str[UUID_STR_LEN] = {0};
+    char client_uuid_str[UUID_STR_LEN] = {0};
     team_info_t info = {0};
 
     if (!name || !description)

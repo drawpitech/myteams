@@ -17,8 +17,8 @@
 int reply_s_user(connection_t *connect)
 {
     user_info_t info = {0};
-    char user_uuid[37] = {0};
-    char team_uuid[37] = {0};
+    char user_uuid[UUID_STR_LEN] = {0};
+    char team_uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &info, sizeof(info)) != SUCCESS)
         return ERROR;
@@ -34,7 +34,7 @@ int reply_s_user(connection_t *connect)
 int reply_s_message(connection_t *connect)
 {
     user_info_t info = {0};
-    char user_uuid[37] = {0};
+    char user_uuid[UUID_STR_LEN] = {0};
 
     if (get_info_type(connect, &info, sizeof(info)) != SUCCESS)
         return ERROR;

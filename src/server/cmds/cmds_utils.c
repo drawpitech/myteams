@@ -12,6 +12,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <uuid/uuid.h>
 
 char *get_quoted_arg(char *buff, size_t start, size_t *end)
@@ -55,13 +56,13 @@ bool is_logged_in(client_t *client)
 
 static bool send_unknow_error(client_t *client, char type, uuid_t uuid)
 {
-    char uuid_str[37] = {0};
+    char uuid_str[UUID_STR_LEN] = {0};
 
     uuid_unparse(uuid, uuid_str);
-    write(client->fd, "51", 2);
-    write(client->fd, &type, 1);
+    dprintf(client->fd, "51%c", type);
+    fsync(client->fd);
     write(client->fd, uuid_str, sizeof(uuid_str));
-    DEBUG("send 51%c\n <uid> to user", type);
+    DEBUG("send 51%c <uid> to user", type);
     return false;
 }
 
@@ -69,18 +70,18 @@ bool check_context(client_t *client)
 {
     if (!client->team) {
         if (!uuid_is_null(client->uuid.team))
-            return true;
-        return send_unknow_error(client, '1', client->uuid.team);
+            return send_unknow_error(client, '1', client->uuid.team);
+        return true;
     }
     if (!client->channel) {
         if (!uuid_is_null(client->uuid.channel))
-            return true;
-        return send_unknow_error(client, '2', client->uuid.channel);
+            return send_unknow_error(client, '2', client->uuid.channel);
+        return true;
     }
     if (!client->thread) {
         if (!uuid_is_null(client->uuid.thread))
-            return true;
-        return send_unknow_error(client, '3', client->uuid.thread);
+            return send_unknow_error(client, '3', client->uuid.thread);
+        return true;
     }
     return true;
 }

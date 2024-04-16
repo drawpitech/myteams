@@ -34,7 +34,8 @@
  */
 void append_to_array(void *array, size_t size, void *elem)
 {
-    struct {
+    struct
+    {
         size_t size;
         size_t alloc;
         uint8_t *array;
@@ -114,6 +115,9 @@ static bool open_server(server_t *s)
         perror("socket");
         return false;
     }
+    if (setsockopt(s->fd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) ==
+        -1)
+        return false;
     s->addr = (struct sockaddr_in){
         .sin_family = AF_INET,
         .sin_port = htons(s->port),
