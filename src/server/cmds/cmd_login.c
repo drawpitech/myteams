@@ -17,7 +17,7 @@
 #include "ressources_infos.h"
 #include "server.h"
 
-static void create_user(server_t *server, client_t *client, char *name)
+static user_t *create_user(server_t *server, client_t *client, char *name)
 {
     user_t new = {0};
     char uuid_str[37] = {0};
@@ -27,8 +27,12 @@ static void create_user(server_t *server, client_t *client, char *name)
     uuid_unparse(new.uuid, uuid_str);
     append_to_array(&server->users, sizeof new, &new);
     client->user = &server->users.arr[server->users.size - 1];
-    DEBUG("User %s <%s> created", client->user->name, uuid_str);
-    server_event_user_created(uuid_str, client->user->name);
+    DEBUG(
+        "User %s <%s> created", server->users.arr[server->users.size - 1].name,
+        uuid_str);
+    server_event_user_created(
+        uuid_str, server->users.arr[server->users.size - 1].name);
+    return &server->users.arr[server->users.size - 1];
 }
 
 static void assign_user(client_t *client, user_t *user)
@@ -61,10 +65,9 @@ void cmd_login(server_t *server, client_t *client)
         return;
     }
     user = get_user_by_name(server, name);
-    if (user != NULL)
-        assign_user(client, user);
-    else
-        create_user(server, client, name);
+    if (!user)
+        user = create_user(server, client, name);
+    assign_user(client, user);
     client->user->status += 1;
     broadcast(server, "311", user_to_info(client->user, &info), sizeof info);
 }
