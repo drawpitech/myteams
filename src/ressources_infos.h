@@ -45,8 +45,10 @@ typedef struct message_info {
     char body[MAX_BODY_LENGTH];
 } message_info_t;
 
+// team uuid is used for subscribe commands
 typedef struct user_info {
     uuid_t user_uuid;
+    uuid_t team_uuid;
     char name[MAX_NAME_LENGTH];
     int status;
 } user_info_t;

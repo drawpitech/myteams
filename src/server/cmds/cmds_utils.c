@@ -7,10 +7,10 @@
 
 #include "cmds_utils.h"
 
+#include "ressources_infos.h"
 #include "server.h"
 #include <stddef.h>
 #include <string.h>
-#include "ressources_infos.h"
 
 char *get_quoted_arg(char *buff, size_t start, size_t *end)
 {
