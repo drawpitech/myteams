@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_teams
 ** File description:
-** handle_reply_single
+** reply_single
 */
 
 #include <myteams/logging_client.h>
