@@ -13,7 +13,6 @@
 
 #include "client.h"
 #include "command.h"
-#include "ressources_infos.h"
 #include "utils.h"
 
 int cmd_create(

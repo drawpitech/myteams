@@ -6,11 +6,13 @@
 */
 
 #include "cmds_utils.h"
-
-#include "ressources_infos.h"
+#include "debug.h"
 #include "server.h"
+#include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <string.h>
+#include <uuid/uuid.h>
 
 char *get_quoted_arg(char *buff, size_t start, size_t *end)
 {
@@ -51,23 +53,34 @@ bool is_logged_in(client_t *client)
     return true;
 }
 
-user_info_t *user_to_info(user_t *user, user_info_t *info)
+static bool send_unknow_error(client_t *client, char type, uuid_t uuid)
 {
-    if (user == NULL || info == NULL)
-        return NULL;
-    memset(info, 0, sizeof *info);
-    strcpy(info->name, user->name);
-    uuid_copy(info->user_uuid, user->uuid);
-    return info;
+    char uuid_str[37] = {0};
+
+    uuid_unparse(uuid, uuid_str);
+    write(client->fd, "51", 2);
+    write(client->fd, &type, 1);
+    write(client->fd, uuid_str, sizeof(uuid_str));
+    DEBUG("send 51%c\n <uid> to user", type);
+    return false;
 }
 
-team_info_t *team_to_info(team_t *team, team_info_t *info)
+bool check_context(client_t *client)
 {
-    if (team == NULL || info == NULL)
-        return NULL;
-    memset(info, 0, sizeof *info);
-    strcpy(info->description, team->description);
-    strcpy(info->name, team->name);
-    uuid_copy(info->uuid, team->uuid);
-    return info;
+    if (!client->team) {
+        if (!uuid_is_null(client->uuid.team))
+            return true;
+        return send_unknow_error(client, '1', client->uuid.team);
+    }
+    if (!client->channel) {
+        if (!uuid_is_null(client->uuid.channel))
+            return true;
+        return send_unknow_error(client, '2', client->uuid.channel);
+    }
+    if (!client->thread) {
+        if (!uuid_is_null(client->uuid.thread))
+            return true;
+        return send_unknow_error(client, '3', client->uuid.thread);
+    }
+    return true;
 }

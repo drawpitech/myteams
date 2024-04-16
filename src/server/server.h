@@ -72,6 +72,7 @@ typedef struct {
 typedef struct {
     uuid_t uuid;
     char name[MAX_NAME_LENGTH];
+    int status;
 } user_t;
 
 typedef struct {

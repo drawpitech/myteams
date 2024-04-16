@@ -37,7 +37,7 @@ static void create_new_team(
     append_to_array(&server->teams, sizeof(team_t), &new_team);
     server_event_team_created(team_uuid_str, new_team.name, client_uuid_str);
     team_to_info(&new_team, &info);
-    write(client->fd, "211", 4);
+    write(client->fd, "211", 3);
     write(client->fd, &info, sizeof(info));
     broadcast(server, "341", &info, sizeof(info));
 }
@@ -59,8 +59,6 @@ static void create_teams(server_t *server, client_t *client)
     char *description = NULL;
     size_t arg_pos = 0;
 
-    if (!is_logged_in(client))
-        return;
     name = get_quoted_arg(client->buffer, 0, &arg_pos);
     arg_pos += 1;
     if (name && team_already_exist(server, client, name))
@@ -92,7 +90,7 @@ static void create_reply(UNUSED server_t *server, UNUSED client_t *client)
 
 void cmd_create(server_t *server, client_t *client)
 {
-    if (!server || !client)
+    if (!server || !client || !is_logged_in(client) || !check_context(client))
         return;
     if (!client->team) {
         create_teams(server, client);

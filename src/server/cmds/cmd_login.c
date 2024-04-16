@@ -65,5 +65,6 @@ void cmd_login(server_t *server, client_t *client)
         assign_user(client, user);
     else
         create_user(server, client, name);
+    client->user->status += 1;
     broadcast(server, "311", user_to_info(client->user, &info), sizeof info);
 }

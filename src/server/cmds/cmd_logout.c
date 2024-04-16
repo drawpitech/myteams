@@ -21,6 +21,9 @@ void cmd_logout(server_t *server, client_t *client)
 
     if (client->user == NULL)
         return;
+    client->user->status -= 1;
+    if (client->user->status < 0)
+        client->user->status = 0;
     uuid_unparse(client->user->uuid, uuid_str);
     server_event_user_logged_out(uuid_str);
     broadcast(server, "312", user_to_info(client->user, &info), sizeof info);
