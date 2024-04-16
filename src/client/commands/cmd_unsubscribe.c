@@ -15,6 +15,7 @@
 int cmd_unsubscribe(
     connection_t *connect, const char *cmd, const cmd_conv_t *command)
 {
+    connect->last_cmd = unsubscribe;
     dprintf(
         connect->servfd, "%s%s\n", command->conv, cmd + strlen(command->cmd));
     return SUCCESS;

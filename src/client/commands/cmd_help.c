@@ -12,11 +12,11 @@
 #include "utils.h"
 
 int cmd_help(
-    UNUSED connection_t *connect, UNUSED const char *cmd,
+    connection_t *connect, UNUSED const char *cmd,
     UNUSED const cmd_conv_t *command)
 {
-    for (size_t i = 0; i < LEN_OF(commands); i++) {
+    connect->last_cmd = other;
+    for (size_t i = 0; i < LEN_OF(commands); i++)
         printf("%s: %s\n", commands[i].cmd, commands[i].help);
-    }
     return SUCCESS;
 }
