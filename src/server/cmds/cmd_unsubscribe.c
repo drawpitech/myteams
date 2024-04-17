@@ -7,6 +7,7 @@
 
 #include <myteams/logging_server.h>
 #include <string.h>
+#include <sys/types.h>
 #include <uuid/uuid.h>
 
 #include "cmds/cmds_utils.h"
@@ -37,12 +38,25 @@ static void send_message(client_t *client, team_t *team)
 
     uuid_unparse(client->user->uuid, user_uuid);
     uuid_unparse(team->uuid, team_uuid);
-    server_event_user_subscribed(team_uuid, user_uuid);
+    server_event_user_unsubscribed(team_uuid, user_uuid);
     write(client->fd, "215", 3);
     write(client->fd, user_to_info(client->user, &info, team), sizeof info);
 }
 
-void cmd_subscribe(server_t *server, client_t *client)
+static void remove_user(client_t *client, team_t *team)
+{
+    for (size_t i = 0; i < team->users.size; i++) {
+        if (uuid_compare(client->user->uuid, team->users.arr[i]) == 0) {
+            memcpy(
+                team->users.arr[i], team->users.arr[team->users.size],
+                sizeof(uuid_t));
+            team->users.size -= 1;
+            return;
+        }
+    }
+}
+
+void cmd_unsubscribe(server_t *server, client_t *client)
 {
     char *arg = NULL;
     team_t *team = NULL;
@@ -57,8 +71,8 @@ void cmd_subscribe(server_t *server, client_t *client)
     team = get_team(server, client, arg);
     if (!team)
         return;
-    if (user_in_team(client, team))
+    if (!user_in_team(client, team))
         return;
-    append_to_array(&team->users, sizeof(user_t), client->user);
+    remove_user(client, team);
     send_message(client, team);
 }
