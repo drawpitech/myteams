@@ -10,6 +10,10 @@
 #include "server.h"
 
 void cmd_create(server_t *server, client_t *client);
+void create_teams(server_t *server, client_t *client);
+void create_channel(server_t *server, client_t *client);
+void create_thread(server_t *server, client_t *client);
+
 void cmd_login(server_t *server, client_t *client);
 void cmd_logout(server_t *server, client_t *client);
 void cmd_use(server_t *server, client_t *client);
