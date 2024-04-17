@@ -44,7 +44,7 @@ static size_t count_teams(server_t *server, client_t *client)
     size_t nb = 0;
 
     for (size_t i = 0; i < server->teams.size; i++) {
-        if (user_in_team(client->user->uuid, &server->teams.arr[i]))
+        if (user_in_team(client->user, &server->teams.arr[i]))
             nb += 1;
     }
     return nb;
@@ -57,14 +57,10 @@ static void list_subscribed_team(server_t *server, client_t *client)
 
     dprintf(client->fd, "221");
     fsync(client->fd);
-    write(client->fd, &nb, sizeof(nb));
-    for (size_t i = 0; i < server->teams.size; i++) {
-        if (!user_in_team(client->user->uuid, &server->teams.arr[i]))
-            continue;
-        write(
-            client->fd, team_to_info(&server->teams.arr[i], &info),
-            sizeof(team_info_t));
-    }
+    WRITE(client->fd, nb);
+    for (size_t i = 0; i < server->teams.size; i++)
+        if (user_in_team(client->user, &server->teams.arr[i]))
+            WRITE(client->fd, *team_to_info(&server->teams.arr[i], &info));
 }
 
 static void list_subscribed_users(
@@ -74,14 +70,11 @@ static void list_subscribed_users(
 
     dprintf(client->fd, "225");
     fsync(client->fd);
-    write(client->fd, &team->users.size, sizeof(team->users.size));
-    for (size_t i = 0; i < server->users.size; i++) {
-        if (!user_in_team(server->users.arr[i].uuid, team))
-            continue;
-        write(
-            client->fd, user_to_info(&server->users.arr[i], &info, team),
-            sizeof(user_info_t));
-    }
+    WRITE(client->fd, team->users.size);
+    for (size_t i = 0; i < server->users.size; i++)
+        if (user_in_team(server->users.arr[i].uuid, team))
+            WRITE(
+                client->fd, *user_to_info(&server->users.arr[i], &info, team));
 }
 
 void cmd_subscribed(server_t *server, client_t *client)

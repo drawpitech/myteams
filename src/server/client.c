@@ -23,7 +23,7 @@ void client_init(client_t *client, int fd)
     memset(client, 0, sizeof *client);
     client->fd = fd;
     client->buffer[0] = '\0';
-    client->user = NULL;
+    uuid_clear(client->user);
     DEBUG_MSG("Client connected");
 }
 

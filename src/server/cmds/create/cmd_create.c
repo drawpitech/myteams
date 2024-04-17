@@ -22,20 +22,24 @@ static void send_to_users(server_t *server, team_t *team, reply_info_t *info)
 {
     for (size_t i = 0; i < server->clients.size; i++) {
         if (server->clients.arr[i].fd == -1 ||
-            !user_in_team(server->clients.arr[i].user->uuid, team))
+            !user_in_team(server->clients.arr[i].user, team))
             continue;
         write(server->clients.arr[i].fd, "344", 3);
         write(server->clients.arr[i].fd, info, sizeof(*info));
     }
 }
 
-static void message_user(client_t *client, comment_t *comm)
+static void message_user(server_t *server, client_t *client, comment_t *comm)
 {
     char thread_uuid[UUID_STR_LEN] = {0};
     char user_uuid[UUID_STR_LEN] = {0};
+    user_t *user = get_user_by_uuid(server, client->user);
+    team_t *team = get_team_by_uuid(server, client->team);
+    channel_t *channel = get_channel_by_uuid(team, client->channel);
+    thread_t *thread = get_thread_by_uuid(channel, client->thread);
 
-    uuid_unparse(client->thread->thread_uuid, thread_uuid);
-    uuid_unparse(client->user->uuid, user_uuid);
+    uuid_unparse(thread->thread_uuid, thread_uuid);
+    uuid_unparse(user->uuid, user_uuid);
     server_event_reply_created(thread_uuid, user_uuid, comm->message);
 }
 
@@ -44,17 +48,20 @@ static void create_new_reply(
 {
     comment_t comment = {0};
     reply_info_t info = {0};
+    team_t *team = get_team_by_uuid(server, client->team);
+    channel_t *channel = get_channel_by_uuid(team, client->channel);
+    thread_t *thread = get_thread_by_uuid(channel, client->thread);
 
-    if (!body)
+    if (body == NULL)
         return;
-    uuid_copy(comment.author_uuid, client->user->uuid);
+    uuid_copy(comment.author_uuid, client->user);
     strcpy(comment.message, body);
-    append_to_array(&client->thread->comments, sizeof(comment_t), &comment);
+    append_to_array(&thread->comments, sizeof comment, &comment);
     write(client->fd, "214", 3);
-    comment_to_info(&comment, &info, client->thread, client->team);
-    write(client->fd, &info, sizeof(info));
-    message_user(client, &comment);
-    send_to_users(server, client->team, &info);
+    comment_to_info(&comment, &info, thread, team);
+    write(client->fd, &info, sizeof info);
+    message_user(server, client, &comment);
+    send_to_users(server, team, &info);
 }
 
 static void create_reply(UNUSED server_t *server, UNUSED client_t *client)
@@ -74,21 +81,18 @@ void cmd_create(server_t *server, client_t *client)
 {
     if (!server || !client || !is_logged_in(client) || !check_context(client))
         return;
-    if (!client->team) {
+    if (uuid_is_null(client->team)) {
         create_teams(server, client);
         return;
     }
-    if (!user_in_team(client->user->uuid, client->team)) {
+    if (!user_in_team(client->user, get_team_by_uuid(server, client->team))) {
         dprintf(client->fd, "520");
         return;
     }
-    if (!client->channel) {
+    if (uuid_is_null(client->channel))
         create_channel(server, client);
-        return;
-    }
-    if (!client->thread) {
+    else if (uuid_is_null(client->thread))
         create_thread(server, client);
-        return;
-    }
-    create_reply(server, client);
+    else
+        create_reply(server, client);
 }
