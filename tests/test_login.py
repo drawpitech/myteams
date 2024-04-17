@@ -33,14 +33,17 @@ def test_logout():
     uuid = serv[0][1]
     assert serv[0][2] == name
 
+    assert serv[1][0] == "server_event_user_logged_in"
+    assert serv[1][1] == uuid
+
     assert cli[0][0] == "client_event_logged_in"
     assert cli[0][1] == uuid
     assert cli[0][2] == name
 
     # logout
 
-    assert serv[1][0] == "server_event_user_logged_out"
-    assert serv[1][1] == uuid
+    assert serv[2][0] == "server_event_user_logged_out"
+    assert serv[2][1] == uuid
 
     assert cli[1][0] == "client_event_logged_out"
     assert cli[1][1] == uuid

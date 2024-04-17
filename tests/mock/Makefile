@@ -9,7 +9,7 @@ SRC := $(shell find . -name '*.c')
 OBJ := $(SRC:.c=.o)
 NAME := libmyteams.so
 
-CFLAGS := -isystem ../../libs
+CFLAGS := -isystem ../../libs -fPIC
 LDFLAGS := -L ../../libs/myteams
 LDLIBS := -lmyteams
 
