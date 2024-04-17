@@ -47,9 +47,8 @@ static void remove_user(client_t *client, team_t *team)
 {
     for (size_t i = 0; i < team->users.size; i++) {
         if (uuid_compare(client->user->uuid, team->users.arr[i]) == 0) {
-            memcpy(
-                team->users.arr[i], team->users.arr[team->users.size],
-                sizeof(uuid_t));
+            uuid_copy(
+                team->users.arr[i], team->users.arr[team->users.size - 1]);
             team->users.size -= 1;
             return;
         }
