@@ -21,7 +21,7 @@ static void send_to_users(server_t *server, team_t *team, channel_info_t *info)
 {
     for (size_t i = 0; i < server->clients.size; i++) {
         if (server->clients.arr[i].fd == -1 ||
-            !user_in_team(server->clients.arr[i].user->uuid, team))
+            !user_in_team(server->clients.arr[i].user, team))
             continue;
         write(server->clients.arr[i].fd, "342", 3);
         write(server->clients.arr[i].fd, info, sizeof(*info));
@@ -36,6 +36,7 @@ static void create_new_channel(
     char chan_uuid[UUID_STR_LEN] = {0};
     char team_uuid[UUID_STR_LEN] = {0};
     channel_info_t info = {0};
+    team_t *team = get_team_by_uuid(server, client->team);
 
     if (!name || !description)
         return;
@@ -43,12 +44,12 @@ static void create_new_channel(
     strcpy(new_chan.description, description);
     uuid_generate(new_chan.uuid);
     uuid_unparse(new_chan.uuid, chan_uuid);
-    uuid_unparse(client->team->uuid, team_uuid);
-    append_to_array(&client->team->channels, sizeof(channel_t), &new_chan);
+    uuid_unparse(client->team, team_uuid);
+    append_to_array(&team->channels, sizeof new_chan, &new_chan);
     server_event_channel_created(team_uuid, chan_uuid, new_chan.name);
     write(client->fd, "212", 3);
     write(client->fd, channel_to_info(&new_chan, &info), sizeof(info));
-    send_to_users(server, client->team, &info);
+    send_to_users(server, team, &info);
 }
 
 static bool channel_already_exist(team_t *team, client_t *client, char *name)
@@ -67,10 +68,11 @@ void create_channel(server_t *server, client_t *client)
     char *name = NULL;
     char *description = NULL;
     size_t arg_pos = 0;
+    team_t *team = get_team_by_uuid(server, client->team);
 
     name = get_quoted_arg(client->buffer, 0, &arg_pos);
     arg_pos += 1;
-    if (name && channel_already_exist(client->team, client, name))
+    if (name && channel_already_exist(team, client, name))
         return;
     if (name) {
         description = get_quoted_arg(client->buffer, arg_pos, &arg_pos);

@@ -37,9 +37,13 @@ char *get_quoted_arg(char *buff, size_t start, size_t *end)
 
 void broadcast(server_t *server, char *code, void *msg, size_t size)
 {
+    if (server == NULL || code == NULL || msg == NULL)
+        return;
+    DEBUG_MSG("Broadcasting message");
     for (size_t i = 0; i < server->clients.size; i++) {
         if (server->clients.arr[i].fd == -1)
             continue;
+        DEBUG("Broadcasting to fd %d", server->clients.arr[i].fd);
         write(server->clients.arr[i].fd, code, strlen(code));
         write(server->clients.arr[i].fd, msg, size);
     }
@@ -47,6 +51,8 @@ void broadcast(server_t *server, char *code, void *msg, size_t size)
 
 bool user_in_team(uuid_t uuid, team_t *team)
 {
+    if (team == NULL)
+        return false;
     for (size_t i = 0; i < team->users.size; i++) {
         if (uuid_compare(team->users.arr[i], uuid) == 0)
             return true;
@@ -56,7 +62,9 @@ bool user_in_team(uuid_t uuid, team_t *team)
 
 bool is_logged_in(client_t *client)
 {
-    if (!client->user) {
+    if (client == NULL)
+        return false;
+    if (uuid_is_null(client->user)) {
         dprintf(client->fd, "520\n");
         return false;
     }
@@ -75,21 +83,28 @@ static bool send_unknow_error(client_t *client, char type, uuid_t uuid)
     return false;
 }
 
+static bool uuid_is_invalid(uuid_t uuid)
+{
+    return uuid_compare(uuid, INVALID_UUID) == 0;
+}
+
 bool check_context(client_t *client)
 {
-    if (!client->team) {
-        if (!uuid_is_null(client->uuid.team))
-            return send_unknow_error(client, '1', client->uuid.team);
+    if (client == NULL)
+        return false;
+    if (uuid_is_null(client->team)) {
+        if (uuid_is_invalid(client->team))
+            return send_unknow_error(client, '1', client->team);
         return true;
     }
-    if (!client->channel) {
-        if (!uuid_is_null(client->uuid.channel))
-            return send_unknow_error(client, '2', client->uuid.channel);
+    if (uuid_is_null(client->channel)) {
+        if (uuid_is_invalid(client->channel))
+            return send_unknow_error(client, '2', client->channel);
         return true;
     }
-    if (!client->thread) {
-        if (!uuid_is_null(client->uuid.thread))
-            return send_unknow_error(client, '3', client->uuid.thread);
+    if (uuid_is_null(client->thread)) {
+        if (uuid_is_invalid(client->thread))
+            return send_unknow_error(client, '3', client->thread);
         return true;
     }
     return true;

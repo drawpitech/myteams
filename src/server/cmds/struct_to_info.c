@@ -22,7 +22,7 @@ user_info_t *user_to_info(user_t *user, user_info_t *info, team_t *team)
         info->status = 1;
     strcpy(info->name, user->name);
     uuid_copy(info->user_uuid, user->uuid);
-    if (team)
+    if (team != NULL)
         uuid_copy(info->team_uuid, team->uuid);
     return info;
 }
@@ -65,7 +65,7 @@ thread_info_t *thread_to_info(thread_t *thread, thread_info_t *info)
 reply_info_t *comment_to_info(
     comment_t *reply, reply_info_t *info, thread_t *thread, team_t *team)
 {
-    if (reply == NULL || info == NULL)
+    if (reply == NULL || info == NULL || thread == NULL || team == NULL)
         return NULL;
     memset(info, 0, sizeof *info);
     strcpy(info->body, reply->message);

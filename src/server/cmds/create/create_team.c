@@ -32,7 +32,7 @@ static void create_new_team(
     strcpy(new_team.description, description);
     uuid_generate(new_team.uuid);
     uuid_unparse(new_team.uuid, team_uuid_str);
-    uuid_unparse(client->user->uuid, client_uuid_str);
+    uuid_unparse(client->user, client_uuid_str);
     append_to_array(&server->teams, sizeof(team_t), &new_team);
     server_event_team_created(team_uuid_str, new_team.name, client_uuid_str);
     team_to_info(&new_team, &info);

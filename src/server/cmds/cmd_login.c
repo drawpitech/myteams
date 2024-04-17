@@ -38,9 +38,9 @@ static void assign_user(client_t *client, user_t *user)
 {
     char uuid_str[UUID_STR_LEN] = {0};
 
-    client->user = user;
+    uuid_copy(client->user, user->uuid);
     uuid_unparse(user->uuid, uuid_str);
-    DEBUG("User %s <%s> logged", client->user->name, uuid_str);
+    DEBUG("User %s <%s> logged", user->name, uuid_str);
     server_event_user_logged_in(uuid_str);
 }
 
@@ -64,10 +64,9 @@ void cmd_login(server_t *server, client_t *client)
         return;
     }
     user = get_user_by_name(server, name);
-    if (!user)
+    if (user == NULL)
         user = create_user(server, name);
     assign_user(client, user);
-    client->user->status += 1;
-    broadcast(
-        server, "311", user_to_info(client->user, &info, NULL), sizeof info);
+    user->status += 1;
+    broadcast(server, "311", user_to_info(user, &info, NULL), sizeof info);
 }
