@@ -49,7 +49,7 @@ static void create_new_reply(
         return;
     uuid_copy(comment.author_uuid, client->user->uuid);
     strcpy(comment.message, body);
-    append_to_array(&client->thread->comments, sizeof(thread_t), &comment);
+    append_to_array(&client->thread->comments, sizeof(comment_t), &comment);
     write(client->fd, "214", 3);
     comment_to_info(&comment, &info, client->thread, client->team);
     write(client->fd, &info, sizeof(info));

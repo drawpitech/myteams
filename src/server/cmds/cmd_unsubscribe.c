@@ -18,8 +18,8 @@
 static team_t *get_team(server_t *server, client_t *client, char *uuid_str)
 {
     uuid_t uuid = {0};
-    uuid_parse(uuid_str, uuid);
 
+    uuid_parse(uuid_str, uuid);
     for (size_t i = 0; i < server->teams.size; i++) {
         if (uuid_compare(server->teams.arr[i].uuid, uuid) == 0)
             return &server->teams.arr[i];

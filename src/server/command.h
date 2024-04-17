@@ -37,8 +37,8 @@ static const struct cmd_s {
     {"LOGOUT", cmd_logout, "disconnect the client from the server"},
     {"MESSAGES", NULL, "list all messages exchanged with the specified user"},
     {"SEND", NULL, "send a message to specific user"},
-    {"SUBSCRIBE", cmd_subscribe, "subscribe to the events of a team and its sub "
-        "directories (enable reception of all events from a team)"},
+    {"SUBSCRIBE", cmd_subscribe, "subscribe to the events of a team and its "
+        "sub directories (enable reception of all events from a team)"},
     {"SUBSCRIBED", NULL, "list all subscribed teams or list all users "
         "subscribed to a team"},
     {"UNSUBSCRIBE", cmd_unsubscribe, "unsubscribe from a team"},

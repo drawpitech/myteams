@@ -51,7 +51,7 @@ static const func_code_t func_code_tab[] = {
     {"311", &receive_login},
     {"312", &receive_logout},
     {"320", &receive_message},
-    {"330", &receive_reply},
+    {"344", &receive_reply},
     {"341", &receive_created_teams},
     {"342", &receive_created_channel},
     {"343", &receive_created_thread},

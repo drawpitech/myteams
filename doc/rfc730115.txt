@@ -177,6 +177,7 @@ Such as:
 
         343 -> Gives the created thread informations
 
+        344 -> Gives the created reply informations
 
 
 
