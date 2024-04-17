@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_teams
 ** File description:
-** cmd_create
+** create_team
 */
 
 #include <myteams/logging_client.h>
@@ -16,7 +16,6 @@
 #include "command.h"
 #include "ressources_infos.h"
 #include "server.h"
-#include "utils.h"
 
 static void create_new_team(
     server_t *server, client_t *client, const char name[],
@@ -53,7 +52,7 @@ static bool team_already_exist(server_t *server, client_t *client, char *name)
     return false;
 }
 
-static void create_teams(server_t *server, client_t *client)
+void create_teams(server_t *server, client_t *client)
 {
     char *name = NULL;
     char *description = NULL;
@@ -71,38 +70,4 @@ static void create_teams(server_t *server, client_t *client)
         }
     }
     dprintf(client->fd, "503 Syntax error.\n");
-}
-
-static void create_channel(UNUSED server_t *server, UNUSED client_t *client)
-{
-    return;
-}
-
-static void create_thread(UNUSED server_t *server, UNUSED client_t *client)
-{
-    return;
-}
-
-static void create_reply(UNUSED server_t *server, UNUSED client_t *client)
-{
-    return;
-}
-
-void cmd_create(server_t *server, client_t *client)
-{
-    if (!server || !client || !is_logged_in(client) || !check_context(client))
-        return;
-    if (!client->team) {
-        create_teams(server, client);
-        return;
-    }
-    if (!client->channel) {
-        create_channel(server, client);
-        return;
-    }
-    if (!client->thread) {
-        create_thread(server, client);
-        return;
-    }
-    create_reply(server, client);
 }

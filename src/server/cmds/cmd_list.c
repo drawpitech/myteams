@@ -64,11 +64,11 @@ static void list_replies(client_t *client, thread_t *thread, team_t *team)
 
     dprintf(client->fd, "221");
     fsync(client->fd);
-    write(client->fd, &thread->comment.size, sizeof(thread->comment.size));
-    for (size_t i = 0; i < thread->comment.size; i++) {
+    write(client->fd, &thread->comments.size, sizeof(thread->comments.size));
+    for (size_t i = 0; i < thread->comments.size; i++) {
         write(
             client->fd,
-            comment_to_info(&thread->comment.arr[i], &info, thread, team),
+            comment_to_info(&thread->comments.arr[i], &info, thread, team),
             sizeof(team_info_t));
     }
 }
@@ -79,6 +79,10 @@ void cmd_list(server_t *server, client_t *client)
         return;
     if (!client->team) {
         list_teams(server, client);
+        return;
+    }
+    if (!user_in_team(client, client->team)) {
+        dprintf(client->fd, "520");
         return;
     }
     if (!client->channel) {

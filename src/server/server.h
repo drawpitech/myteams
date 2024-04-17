@@ -33,7 +33,7 @@ typedef struct {
         size_t size;
         size_t alloc;
         comment_t *arr;
-    } comment;
+    } comments;
 } thread_t;
 
 typedef struct {
@@ -54,7 +54,7 @@ typedef struct {
     struct {
         size_t size;
         size_t alloc;
-        uuid_t arr;
+        uuid_t *arr;
     } users;
     struct {
         size_t size;
