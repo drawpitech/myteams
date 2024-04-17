@@ -18,6 +18,7 @@ void cmd_login(server_t *server, client_t *client);
 void cmd_logout(server_t *server, client_t *client);
 void cmd_use(server_t *server, client_t *client);
 void cmd_user(server_t *server, client_t *client);
+void cmd_users(server_t *server, client_t *client);
 void cmd_list(server_t *server, client_t *client);
 
 void cmd_subscribe(server_t *server, client_t *client);
@@ -47,7 +48,7 @@ static const struct cmd_s {
     {"UNSUBSCRIBE", cmd_unsubscribe, "unsubscribe from a team"},
     {"USE", cmd_use, "sets the command context to a team/channel/thread"},
     {"USER", cmd_user, "get details about the requested user"},
-    {"USERS", NULL, "get the list of all users that exist on the domain"},
+    {"USERS", cmd_users, "get the list of all users that exist on the domain"},
 };
 
 void exec_command(server_t *server, client_t *client);
