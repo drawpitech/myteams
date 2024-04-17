@@ -103,7 +103,7 @@ bool check_context(client_t *client)
         return true;
     }
     if (uuid_is_null(client->thread)) {
-        if (!uuid_is_invalid(client->thread))
+        if (uuid_is_invalid(client->thread))
             return send_unknow_error(client, '3', client->thread);
         return true;
     }
