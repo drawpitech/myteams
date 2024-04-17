@@ -17,7 +17,7 @@
 #include "ressources_infos.h"
 #include "server.h"
 
-static user_t *create_user(server_t *server, client_t *client, char *name)
+static user_t *create_user(server_t *server, char *name)
 {
     user_t new = {0};
     char uuid_str[UUID_STR_LEN] = {0};
@@ -26,7 +26,6 @@ static user_t *create_user(server_t *server, client_t *client, char *name)
     uuid_generate(new.uuid);
     uuid_unparse(new.uuid, uuid_str);
     append_to_array(&server->users, sizeof new, &new);
-    client->user = &server->users.arr[server->users.size - 1];
     DEBUG(
         "User %s <%s> created", server->users.arr[server->users.size - 1].name,
         uuid_str);
@@ -61,13 +60,13 @@ void cmd_login(server_t *server, client_t *client)
     user_info_t info = {0};
 
     if (name == NULL) {
-        dprintf(client->fd, "503 Syntax error.\n");
+        dprintf(client->fd, "502 Syntax error.\n");
         return;
     }
     user = get_user_by_name(server, name);
     if (!user)
-        user = create_user(server, client, name);
+        user = create_user(server, name);
     assign_user(client, user);
     client->user->status += 1;
-    broadcast(server, "311", user_to_info(client->user, &info), sizeof info);
+    broadcast(server, "311", user_to_info(client->user, &info, NULL), sizeof info);
 }

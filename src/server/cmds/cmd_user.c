@@ -42,5 +42,5 @@ void cmd_user(server_t *server, client_t *client)
     if (user == NULL)
         return;
     write(client->fd, "215", 3);
-    write(client->fd, user_to_info(user, &info), sizeof info);
+    write(client->fd, user_to_info(user, &info, NULL), sizeof info);
 }

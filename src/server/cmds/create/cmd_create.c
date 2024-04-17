@@ -64,7 +64,7 @@ static void create_reply(UNUSED server_t *server, UNUSED client_t *client)
 
     body = get_quoted_arg(client->buffer, 0, &arg_pos);
     if (!body) {
-        dprintf(client->fd, "503 Syntax error.\n");
+        dprintf(client->fd, "502 Syntax error.\n");
         return;
     }
     create_new_reply(server, client, body);
