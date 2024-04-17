@@ -21,6 +21,8 @@ void cmd_logout(server_t *server, client_t *client)
 
     if (client->user == NULL)
         return;
+    client->user->status = client->user->status - 1;
+    printf("-->%d\n", client->user->status);
     client->user->status -= 1;
     if (client->user->status < 0)
         client->user->status = 0;
