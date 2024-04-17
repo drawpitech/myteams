@@ -7,10 +7,11 @@
 
 #pragma once
 
+#include <uuid/uuid.h>
 #include "ressources_infos.h"
 #include "server.h"
 
-bool user_in_team(client_t *client, team_t *team);
+bool user_in_team(uuid_t uuid, team_t *team);
 void broadcast(server_t *server, char *code, void *msg, size_t size);
 char *get_quoted_arg(char *buff, size_t start, size_t *end);
 bool is_logged_in(client_t *client);

@@ -45,10 +45,10 @@ void broadcast(server_t *server, char *code, void *msg, size_t size)
     }
 }
 
-bool user_in_team(client_t *client, team_t *team)
+bool user_in_team(uuid_t uuid, team_t *team)
 {
     for (size_t i = 0; i < team->users.size; i++) {
-        if (uuid_compare(team->users.arr[i], client->user->uuid) == 0)
+        if (uuid_compare(team->users.arr[i], uuid) == 0)
             return true;
     }
     return false;

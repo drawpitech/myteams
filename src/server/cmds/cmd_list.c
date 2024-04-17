@@ -81,7 +81,7 @@ void cmd_list(server_t *server, client_t *client)
         list_teams(server, client);
         return;
     }
-    if (!user_in_team(client, client->team)) {
+    if (!user_in_team(client->user->uuid, client->team)) {
         dprintf(client->fd, "520");
         return;
     }

@@ -22,6 +22,7 @@ void cmd_list(server_t *server, client_t *client);
 
 void cmd_subscribe(server_t *server, client_t *client);
 void cmd_unsubscribe(server_t *server, client_t *client);
+void cmd_subscribed(server_t *server, client_t *client);
 
 static const struct cmd_s {
     char *name;
@@ -39,8 +40,8 @@ static const struct cmd_s {
     {"SEND", NULL, "send a message to specific user"},
     {"SUBSCRIBE", cmd_subscribe, "subscribe to the events of a team and its "
         "sub directories (enable reception of all events from a team)"},
-    {"SUBSCRIBED", NULL, "list all subscribed teams or list all users "
-        "subscribed to a team"},
+    {"SUBSCRIBED", cmd_subscribed, "list all subscribed teams or list all "
+        "users subscribed to a team"},
     {"UNSUBSCRIBE", cmd_unsubscribe, "unsubscribe from a team"},
     {"USE", cmd_use, "sets the command context to a team/channel/thread"},
     {"USER", cmd_user, "get details about the requested user"},

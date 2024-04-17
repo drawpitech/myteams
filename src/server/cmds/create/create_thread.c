@@ -22,7 +22,7 @@ static void send_to_users(server_t *server, team_t *team, thread_info_t *info)
 {
     for (size_t i = 0; i < server->clients.size; i++) {
         if (server->clients.arr[i].fd == -1 ||
-            !user_in_team(&server->clients.arr[i], team))
+            !user_in_team(server->clients.arr[i].user->uuid, team))
             continue;
         write(server->clients.arr[i].fd, "343", 3);
         write(server->clients.arr[i].fd, info, sizeof(*info));

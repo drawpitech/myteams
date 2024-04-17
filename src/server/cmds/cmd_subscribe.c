@@ -57,7 +57,7 @@ void cmd_subscribe(server_t *server, client_t *client)
     team = get_team(server, client, arg);
     if (!team)
         return;
-    if (user_in_team(client, team))
+    if (user_in_team(client->user->uuid, team))
         return;
     append_to_array(&team->users, sizeof(uuid_t), client->user->uuid);
     send_message(client, team);

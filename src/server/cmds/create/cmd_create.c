@@ -22,7 +22,7 @@ static void send_to_users(server_t *server, team_t *team, reply_info_t *info)
 {
     for (size_t i = 0; i < server->clients.size; i++) {
         if (server->clients.arr[i].fd == -1 ||
-            !user_in_team(&server->clients.arr[i], team))
+            !user_in_team(server->clients.arr[i].user->uuid, team))
             continue;
         write(server->clients.arr[i].fd, "344", 3);
         write(server->clients.arr[i].fd, info, sizeof(*info));
@@ -78,7 +78,7 @@ void cmd_create(server_t *server, client_t *client)
         create_teams(server, client);
         return;
     }
-    if (!user_in_team(client, client->team)) {
+    if (!user_in_team(client->user->uuid, client->team)) {
         dprintf(client->fd, "520");
         return;
     }
