@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_teams
 ** File description:
-** subscribe
+** cmd_subscribe
 */
 
 #include <myteams/logging_server.h>
