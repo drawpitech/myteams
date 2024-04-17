@@ -13,7 +13,7 @@
 #include "ressources_infos.h"
 #include "server.h"
 
-user_info_t *user_to_info(user_t *user, user_info_t *info)
+user_info_t *user_to_info(user_t *user, user_info_t *info, team_t *team)
 {
     if (user == NULL || info == NULL)
         return NULL;
@@ -22,6 +22,8 @@ user_info_t *user_to_info(user_t *user, user_info_t *info)
         info->status = 1;
     strcpy(info->name, user->name);
     uuid_copy(info->user_uuid, user->uuid);
+    if (team)
+        uuid_copy(info->team_uuid, team->uuid);
     return info;
 }
 

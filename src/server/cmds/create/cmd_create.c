@@ -22,7 +22,7 @@ static void send_to_users(server_t *server, team_t *team, reply_info_t *info)
 {
     for (size_t i = 0; i < server->clients.size; i++) {
         if (server->clients.arr[i].fd == -1 ||
-            !user_in_team(&server->clients.arr[i], team))
+            !user_in_team(server->clients.arr[i].user->uuid, team))
             continue;
         write(server->clients.arr[i].fd, "344", 3);
         write(server->clients.arr[i].fd, info, sizeof(*info));
@@ -49,7 +49,7 @@ static void create_new_reply(
         return;
     uuid_copy(comment.author_uuid, client->user->uuid);
     strcpy(comment.message, body);
-    append_to_array(&client->thread->comments, sizeof(thread_t), &comment);
+    append_to_array(&client->thread->comments, sizeof(comment_t), &comment);
     write(client->fd, "214", 3);
     comment_to_info(&comment, &info, client->thread, client->team);
     write(client->fd, &info, sizeof(info));
@@ -64,7 +64,7 @@ static void create_reply(UNUSED server_t *server, UNUSED client_t *client)
 
     body = get_quoted_arg(client->buffer, 0, &arg_pos);
     if (!body) {
-        dprintf(client->fd, "503 Syntax error.\n");
+        dprintf(client->fd, "502 Syntax error.\n");
         return;
     }
     create_new_reply(server, client, body);
@@ -78,7 +78,7 @@ void cmd_create(server_t *server, client_t *client)
         create_teams(server, client);
         return;
     }
-    if (!user_in_team(client, client->team)) {
+    if (!user_in_team(client->user->uuid, client->team)) {
         dprintf(client->fd, "520");
         return;
     }

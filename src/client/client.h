@@ -13,6 +13,7 @@ enum command_type {
     create,
     subscribe,
     unsubscribe,
+    info_cmd,
     other,
 };
 

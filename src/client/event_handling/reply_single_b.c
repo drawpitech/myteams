@@ -28,6 +28,8 @@ int reply_s_user(connection_t *connect)
         client_print_subscribed(user_uuid, team_uuid);
     if (connect->last_cmd == unsubscribe)
         client_print_unsubscribed(user_uuid, team_uuid);
+    if (connect->last_cmd == info_cmd)
+        client_print_user(user_uuid, info.name, info.status);
     return SUCCESS;
 }
 

@@ -23,7 +23,7 @@ static void set_team(server_t *server, client_t *client, char **ptr)
     if (*ptr == NULL)
         return;
     uuid_parse(*ptr, uuid);
-    ptr += end + 1;
+    *ptr += end + 1;
     memcpy(client->uuid.team, uuid, sizeof uuid);
     if (uuid_is_null(client->uuid.team))
         client->uuid.team[0] = 1;
@@ -39,7 +39,7 @@ static void set_channel(UNUSED server_t *server, client_t *client, char **ptr)
     if (*ptr == NULL)
         return;
     uuid_parse(*ptr, uuid);
-    ptr += end + 1;
+    *ptr += end + 1;
     memcpy(client->uuid.channel, uuid, sizeof uuid);
     if (client->team != NULL)
         client->channel = get_channel_by_uuid(client->team, uuid);
@@ -54,7 +54,7 @@ static void set_thread(UNUSED server_t *server, client_t *client, char **ptr)
     if (*ptr == NULL)
         return;
     uuid_parse(*ptr, uuid);
-    ptr += end + 1;
+    *ptr += end + 1;
     memcpy(client->uuid.thread, uuid, sizeof uuid);
     if (client->channel != NULL)
         client->thread = get_thread_by_uuid(client->channel, uuid);

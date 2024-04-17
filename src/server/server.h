@@ -68,7 +68,7 @@ typedef struct {
     struct {
         size_t size;
         size_t alloc;
-        uuid_t arr;
+        uuid_t *arr;
     } users;
 } discussion_t;
 

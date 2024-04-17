@@ -34,13 +34,13 @@ static void list_channels(client_t *client, team_t *team)
 {
     channel_info_t info = {0};
 
-    dprintf(client->fd, "221");
+    dprintf(client->fd, "222");
     fsync(client->fd);
     write(client->fd, &team->channels.size, sizeof(team->channels.size));
     for (size_t i = 0; i < team->channels.size; i++) {
         write(
             client->fd, channel_to_info(&team->channels.arr[i], &info),
-            sizeof(team_info_t));
+            sizeof(info));
     }
 }
 
@@ -48,13 +48,13 @@ static void list_threads(client_t *client, channel_t *channel)
 {
     thread_info_t info = {0};
 
-    dprintf(client->fd, "221");
+    dprintf(client->fd, "223");
     fsync(client->fd);
     write(client->fd, &channel->threads.size, sizeof(channel->threads.size));
     for (size_t i = 0; i < channel->threads.size; i++) {
         write(
             client->fd, thread_to_info(&channel->threads.arr[i], &info),
-            sizeof(team_info_t));
+            sizeof(info));
     }
 }
 
@@ -62,14 +62,14 @@ static void list_replies(client_t *client, thread_t *thread, team_t *team)
 {
     reply_info_t info = {0};
 
-    dprintf(client->fd, "221");
+    dprintf(client->fd, "224");
     fsync(client->fd);
     write(client->fd, &thread->comments.size, sizeof(thread->comments.size));
     for (size_t i = 0; i < thread->comments.size; i++) {
         write(
             client->fd,
             comment_to_info(&thread->comments.arr[i], &info, thread, team),
-            sizeof(team_info_t));
+            sizeof(info));
     }
 }
 
@@ -81,7 +81,7 @@ void cmd_list(server_t *server, client_t *client)
         list_teams(server, client);
         return;
     }
-    if (!user_in_team(client, client->team)) {
+    if (!user_in_team(client->user->uuid, client->team)) {
         dprintf(client->fd, "520");
         return;
     }

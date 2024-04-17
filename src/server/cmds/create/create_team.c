@@ -69,5 +69,5 @@ void create_teams(server_t *server, client_t *client)
             return;
         }
     }
-    dprintf(client->fd, "503 Syntax error.\n");
+    dprintf(client->fd, "502 Syntax error.\n");
 }
