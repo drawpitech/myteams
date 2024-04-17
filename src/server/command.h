@@ -24,6 +24,8 @@ void cmd_subscribe(server_t *server, client_t *client);
 void cmd_unsubscribe(server_t *server, client_t *client);
 void cmd_subscribed(server_t *server, client_t *client);
 
+void cmd_info(server_t *server, client_t *client);
+
 static const struct cmd_s {
     char *name;
     void (*func)(server_t *server, client_t *client);
@@ -31,7 +33,7 @@ static const struct cmd_s {
 } COMMANDS[] = {
     {"CREATE", cmd_create, "based on the context, create the sub resource"},
     {"HELP", NULL, "show help information"},
-    {"INFO", NULL,
+    {"INFO", cmd_info,
         "based on the context, display details of the current resource"},
     {"LIST", cmd_list, "based on the context, list all the sub resources"},
     {"LOGIN", cmd_login, "set the user_name used by client"},
