@@ -64,12 +64,19 @@ typedef struct {
 } team_t;
 
 typedef struct {
-    uuid_t uuid;
+    uuid_t sender_uuid;
+    char body[MAX_BODY_LENGTH];
+    time_t timestamp;
+} message_t;
+
+typedef struct {
+    uuid_t user_1uuid;
+    uuid_t user_2uuid;
     struct {
         size_t size;
         size_t alloc;
-        uuid_t *arr;
-    } users;
+        message_t *arr;
+    } messages;
 } discussion_t;
 
 typedef struct {
@@ -96,8 +103,9 @@ typedef struct {
         team_t *arr;
     } teams;
     struct {
-        discussion_t *arr;
         size_t size;
+        size_t alloc;
+        discussion_t *arr;
     } discussions;
     struct {
         size_t size;

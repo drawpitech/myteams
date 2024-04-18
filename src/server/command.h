@@ -27,6 +27,9 @@ void cmd_subscribed(server_t *server, client_t *client);
 
 void cmd_info(server_t *server, client_t *client);
 
+void cmd_send(server_t *server, client_t *client);
+void cmd_messages(server_t *server, client_t *client);
+
 static const struct cmd_s {
     char *name;
     void (*func)(server_t *server, client_t *client);
@@ -39,8 +42,9 @@ static const struct cmd_s {
     {"LIST", cmd_list, "based on the context, list all the sub resources"},
     {"LOGIN", cmd_login, "set the user_name used by client"},
     {"LOGOUT", cmd_logout, "disconnect the client from the server"},
-    {"MESSAGES", NULL, "list all messages exchanged with the specified user"},
-    {"SEND", NULL, "send a message to specific user"},
+    {"MESSAGES", cmd_messages, "list all messages exchanged with the "
+        "specified user"},
+    {"SEND", cmd_send, "send a message to specific user"},
     {"SUBSCRIBE", cmd_subscribe, "subscribe to the events of a team and its "
         "sub directories (enable reception of all events from a team)"},
     {"SUBSCRIBED", cmd_subscribed, "list all subscribed teams or list all "
