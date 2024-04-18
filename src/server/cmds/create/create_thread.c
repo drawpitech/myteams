@@ -18,11 +18,14 @@
 #include "ressources_infos.h"
 #include "server.h"
 
-static void send_to_users(server_t *server, team_t *team, thread_info_t *info)
+static void send_to_users(
+    server_t *server, uuid_t team_uuid, thread_info_t *info)
 {
+    team_t *team = get_team_by_uuid(server, team_uuid);
+
     for (size_t i = 0; i < server->clients.size; i++) {
         if (server->clients.arr[i].fd == -1 ||
-            !user_in_team(server->clients.arr[i].user->uuid, team))
+            !user_in_team(server->clients.arr[i].user, team))
             continue;
         write(server->clients.arr[i].fd, "343", 3);
         write(server->clients.arr[i].fd, info, sizeof(*info));
@@ -37,8 +40,8 @@ static void send_messages(server_t *server, client_t *client, thread_t *thread)
     char user_uuid[UUID_STR_LEN] = {0};
 
     uuid_unparse(thread->thread_uuid, thread_uuid);
-    uuid_unparse(client->channel->uuid, channel_uuid);
-    uuid_unparse(client->user->uuid, user_uuid);
+    uuid_unparse(client->channel, channel_uuid);
+    uuid_unparse(client->user, user_uuid);
     server_event_thread_created(
         channel_uuid, thread_uuid, user_uuid, thread->title, thread->body);
     write(client->fd, "213", 3);
@@ -51,6 +54,8 @@ static void create_new_thread(
     const char description[])
 {
     thread_t thread = {0};
+    team_t *team = get_team_by_uuid(server, client->team);
+    channel_t *channel = get_channel_by_uuid(team, client->channel);
 
     if (!name || !description)
         return;
@@ -58,14 +63,17 @@ static void create_new_thread(
     strcpy(thread.title, name);
     strcpy(thread.body, description);
     uuid_generate(thread.thread_uuid);
-    uuid_copy(thread.author_uuid, client->user->uuid);
-    append_to_array(&client->channel->threads, sizeof(thread_t), &thread);
+    uuid_copy(thread.author_uuid, client->user);
+    append_to_array(&channel->threads, sizeof(thread_t), &thread);
     send_messages(server, client, &thread);
 }
 
 static bool thread_already_exist(
-    channel_t *channel, client_t *client, char *name)
+    server_t *server, client_t *client, char *name)
 {
+    team_t *team = get_team_by_uuid(server, client->team);
+    channel_t *channel = get_channel_by_uuid(team, client->channel);
+
     for (size_t i = 0; name && i < channel->threads.size; i++) {
         if (strcmp(name, channel->threads.arr[i].title) == 0) {
             dprintf(client->fd, "530\n");
@@ -83,7 +91,7 @@ void create_thread(server_t *server, client_t *client)
 
     name = get_quoted_arg(client->buffer, 0, &arg_pos);
     arg_pos += 1;
-    if (name && thread_already_exist(client->channel, client, name))
+    if (name && thread_already_exist(server, client, name))
         return;
     if (name) {
         description = get_quoted_arg(client->buffer, arg_pos, &arg_pos);

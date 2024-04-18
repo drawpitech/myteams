@@ -8,8 +8,13 @@
 #pragma once
 
 #include <uuid/uuid.h>
+
 #include "ressources_infos.h"
 #include "server.h"
+
+#define WRITE(fd, v) write(fd, &(v), sizeof(v))
+
+static const uuid_t INVALID_UUID = {1};
 
 bool user_in_team(uuid_t uuid, team_t *team);
 void broadcast(server_t *server, char *code, void *msg, size_t size);

@@ -89,16 +89,11 @@ typedef struct {
     int fd;
     struct sockaddr_in addr;
     socklen_t len;
-    user_t *user;
+    uuid_t user;
     char buffer[BUFSIZ];
-    team_t *team;
-    channel_t *channel;
-    thread_t *thread;
-    struct {
-        uuid_t team;
-        uuid_t channel;
-        uuid_t thread;
-    } uuid;
+    uuid_t team;
+    uuid_t channel;
+    uuid_t thread;
 } client_t;
 
 typedef struct {

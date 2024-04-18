@@ -29,17 +29,18 @@ static team_t *get_team(server_t *server, client_t *client, char *uuid_str)
     return NULL;
 }
 
-static void send_message(client_t *client, team_t *team)
+static void send_message(server_t *server, client_t *client, team_t *team)
 {
     user_info_t info = {0};
     char team_uuid[UUID_STR_LEN] = {0};
     char user_uuid[UUID_STR_LEN] = {0};
+    user_t *user = get_user_by_uuid(server, client->user);
 
-    uuid_unparse(client->user->uuid, user_uuid);
+    uuid_unparse(client->user, user_uuid);
     uuid_unparse(team->uuid, team_uuid);
     server_event_user_subscribed(team_uuid, user_uuid);
     write(client->fd, "215", 3);
-    write(client->fd, user_to_info(client->user, &info, team), sizeof info);
+    WRITE(client->fd, *user_to_info(user, &info, team));
 }
 
 void cmd_subscribe(server_t *server, client_t *client)
@@ -57,8 +58,8 @@ void cmd_subscribe(server_t *server, client_t *client)
     team = get_team(server, client, arg);
     if (!team)
         return;
-    if (user_in_team(client->user->uuid, team))
+    if (user_in_team(client->user, team))
         return;
-    append_to_array(&team->users, sizeof(uuid_t), client->user->uuid);
-    send_message(client, team);
+    append_to_array(&team->users, sizeof(uuid_t), client->user);
+    send_message(server, client, team);
 }

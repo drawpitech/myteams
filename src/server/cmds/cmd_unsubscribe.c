@@ -30,23 +30,26 @@ static team_t *get_team(server_t *server, client_t *client, char *uuid_str)
     return NULL;
 }
 
-static void send_message(client_t *client, team_t *team)
+static void send_message(server_t *server, client_t *client, team_t *team)
 {
     user_info_t info = {0};
     char team_uuid[UUID_STR_LEN] = {0};
     char user_uuid[UUID_STR_LEN] = {0};
+    user_t *user = get_user_by_uuid(server, client->user);
 
-    uuid_unparse(client->user->uuid, user_uuid);
+    if (user == NULL)
+        return;
+    uuid_unparse(client->user, user_uuid);
     uuid_unparse(team->uuid, team_uuid);
     server_event_user_unsubscribed(team_uuid, user_uuid);
     write(client->fd, "215", 3);
-    write(client->fd, user_to_info(client->user, &info, team), sizeof info);
+    write(client->fd, user_to_info(user, &info, team), sizeof info);
 }
 
 static void remove_user(client_t *client, team_t *team)
 {
     for (size_t i = 0; i < team->users.size; i++) {
-        if (uuid_compare(client->user->uuid, team->users.arr[i]) == 0) {
+        if (uuid_compare(client->user, team->users.arr[i]) == 0) {
             uuid_copy(
                 team->users.arr[i], team->users.arr[team->users.size - 1]);
             team->users.size -= 1;
@@ -68,10 +71,8 @@ void cmd_unsubscribe(server_t *server, client_t *client)
         return;
     }
     team = get_team(server, client, arg);
-    if (!team)
-        return;
-    if (!user_in_team(client->user->uuid, team))
+    if (team == NULL || !user_in_team(client->user, team))
         return;
     remove_user(client, team);
-    send_message(client, team);
+    send_message(server, client, team);
 }
