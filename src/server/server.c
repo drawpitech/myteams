@@ -82,7 +82,7 @@ static bool parse_port(server_t *serv, char *port)
     long p = strtol(port, &ptr, 10);
 
     if (*ptr != '\0' || p < 0 || p > UINT16_MAX) {
-        fprintf(stderr, "Invalid port number.\n");
+        fprintf(stdout, "Invalid port number.\n");
         return false;
     }
     serv->port = (uint16_t)p;
@@ -92,7 +92,7 @@ static bool parse_port(server_t *serv, char *port)
 static bool parse_args(server_t *serv, int argc, char **argv)
 {
     if (argc != 2) {
-        fprintf(stderr, "Invalid number of arguments.\nUse -help for help\n");
+        fprintf(stdout, "Invalid number of arguments.\nUse -help for help\n");
         return false;
     }
     if (strcmp(argv[1], "-help") == 0) {
@@ -103,7 +103,7 @@ static bool parse_args(server_t *serv, int argc, char **argv)
         return false;
     }
     if (strlen(argv[1]) > 5) {
-        fprintf(stderr, "Invalid port number.\n");
+        fprintf(stdout, "Invalid port number.\n");
         return false;
     }
     return parse_port(serv, argv[1]);

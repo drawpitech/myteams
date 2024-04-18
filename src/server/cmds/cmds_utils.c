@@ -41,7 +41,8 @@ void broadcast(server_t *server, char *code, void *msg, size_t size)
         return;
     DEBUG_MSG("Broadcasting message");
     for (size_t i = 0; i < server->clients.size; i++) {
-        if (server->clients.arr[i].fd == -1)
+        if (server->clients.arr[i].fd == -1
+            || uuid_is_null(server->clients.arr[i].user))
             continue;
         DEBUG("Broadcasting to fd %d", server->clients.arr[i].fd);
         write(server->clients.arr[i].fd, code, strlen(code));

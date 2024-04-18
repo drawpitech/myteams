@@ -27,5 +27,5 @@
 #define SUCCESS 0
 #define LEN_OF(x) (sizeof(x) / sizeof(*x))
 
-#define MSG_ERR(x) dprintf(STDERR_FILENO, x), ERROR
-#define MSG_ERR_V(x, ...) dprintf(STDERR_FILENO, x, __VA_ARGS__), ERROR
+#define MSG_ERR(x) dprintf(STDOUT_FILENO, x), ERROR
+#define MSG_ERR_V(x, ...) dprintf(STDOUT_FILENO, x, __VA_ARGS__), ERROR

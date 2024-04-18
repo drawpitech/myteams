@@ -17,7 +17,7 @@
 int get_info_type(connection_t *connect, void *buff, ssize_t size)
 {
     if (read(connect->servfd, buff, size) < size) {
-        dprintf(STDERR_FILENO, "Error: read from server failed.\n");
+        dprintf(STDOUT_FILENO, "Error: read from server failed.\n");
         return ERROR;
     }
     return SUCCESS;
