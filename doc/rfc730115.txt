@@ -12,6 +12,8 @@ between client and server components. MyTeams aims to reproduce a team
 collaboration application (such as teams, but simpler).
 This RFC outlines the protocol to ensure smooth interaction across platforms.
 
+The server/client communication is based on the TCP protocole.
+
 Some specific characters to understand the grammar:
     [] -> Arguments needed
     "" -> argument must be quoted
@@ -223,3 +225,20 @@ Such as:
             53x [message]
 
         530 -> Ressource already exist
+
+
+
+
+
+
+
+----------------- Server Save ------------------------
+
+The state server's state is saved in the data.tits (in the same folder).
+
+When launched, the server automatically load the data from data.tits
+(in the same folder), if the file exist.
+
+The data are saved as a flattened graph.
+
+The format .tits stand for Teams Internal Transfert Save.

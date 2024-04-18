@@ -131,3 +131,6 @@ thread_t *get_thread_by_uuid(channel_t *channel, uuid_t uuid);
 
 void append_to_array(void *array, size_t size, void *elem);
 void handle_sigint(int sig);
+bool get_running_state(void);
+void set_running_state(bool state);
+void free_server(server_t *server);

@@ -29,6 +29,8 @@ void client_init(client_t *client, int fd)
 
 void client_disconnect(client_t *client)
 {
+    if (client == NULL || client->fd == -1)
+        return;
     close(client->fd);
     client->fd = -1;
     DEBUG_MSG("Client disconnected");
