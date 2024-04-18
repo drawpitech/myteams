@@ -12,7 +12,8 @@ myteams_server
 *.o
 *.d
 *.so
-result
+/result
+.cache/
 
 # Editors junk
 *~
@@ -26,5 +27,5 @@ core.*
 *.gcda
 *.gcno
 
-
-/.cache
+# Data
+*.tits
