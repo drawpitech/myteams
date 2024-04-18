@@ -7,6 +7,7 @@
 
 #include <dirent.h>
 #include <fcntl.h>
+#include <myteams/logging_server.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 
@@ -76,9 +77,17 @@ static void load_data_discussions(int fd, server_t *server)
 
 static void load_data_users(int fd, server_t *serv)
 {
+    char uuid[UUID_STR_LEN] = {0};
+    user_t *u = NULL;
+
     DEBUG_MSG("loading users");
     serv->users.arr = malloc(serv->users.alloc * sizeof *serv->users.arr);
     read(fd, serv->users.arr, serv->users.size * sizeof *serv->users.arr);
+    for (size_t i = 0; i < serv->users.size; i++) {
+        u = &serv->users.arr[i];
+        uuid_unparse(u->uuid, uuid);
+        server_event_user_loaded(uuid, u->name);
+    }
 }
 
 static void load_data_server(int fd, server_t *server)
