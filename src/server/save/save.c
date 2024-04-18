@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
+#include "debug.h"
 #include "server.h"
 
 static void save_data_threads(int fd, channel_t *channel)
@@ -19,6 +20,7 @@ static void save_data_threads(int fd, channel_t *channel)
     thread_t *thread = NULL;
     thread_t copy = {0};
 
+    DEBUG_MSG("saving threads");
     for (size_t i = 0; i < channel->threads.size; i++) {
         thread = &channel->threads.arr[i];
         copy = *thread;
@@ -35,6 +37,7 @@ static void save_data_channels(int fd, team_t *team)
     channel_t *channel = NULL;
     channel_t copy = {0};
 
+    DEBUG_MSG("saving channels");
     for (size_t i = 0; i < team->channels.size; i++) {
         channel = &team->channels.arr[i];
         copy = *channel;
@@ -49,6 +52,7 @@ static void save_data_teams(int fd, server_t *server)
     team_t *team = NULL;
     team_t copy = {0};
 
+    DEBUG_MSG("saving teams");
     for (size_t i = 0; i < server->teams.size; i++) {
         team = &server->teams.arr[i];
         copy = *team;
@@ -64,6 +68,7 @@ static void save_data_discussions(int fd, server_t *server)
     discussion_t *discussion = NULL;
     discussion_t copy = {0};
 
+    DEBUG_MSG("saving discussions");
     for (size_t i = 0; i < server->discussions.size; i++) {
         discussion = &server->discussions.arr[i];
         copy = *discussion;
@@ -79,6 +84,7 @@ static void save_data_users(int fd, server_t *server)
 {
     user_t copy;
 
+    DEBUG_MSG("saving users");
     for (size_t i = 0; i < server->users.size; i++) {
         copy = server->users.arr[i];
         copy.status = 0;
