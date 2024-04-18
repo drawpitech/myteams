@@ -150,6 +150,8 @@ int myteams_server(int argc, char **argv)
         for (size_t i = 0; i < serv.clients.size; ++i)
             handle_client(&serv, &serv.clients.arr[i]);
     }
+    for (size_t i = 0; i < serv.clients.size; ++i)
+        client_disconnect(&serv.clients.arr[i]);
     save_server(&serv);
     free_server(&serv);
     return SUCCESS;
