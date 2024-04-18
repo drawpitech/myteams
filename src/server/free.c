@@ -59,7 +59,7 @@ void free_server(server_t *server)
         free(server->users.arr);
     if (server->discussions.arr != NULL) {
         for (size_t i = 0; i < server->discussions.size; ++i)
-            free_discussion(server->discussions.arr);
+            free_discussion(&server->discussions.arr[i]);
         free(server->discussions.arr);
     }
     if (server->teams.arr != NULL) {
