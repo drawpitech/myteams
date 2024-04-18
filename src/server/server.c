@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include "client.h"
+#include "save/save.h"
 
 /**
  * @brief Append an element to an array.
@@ -138,13 +139,18 @@ int myteams_server(int argc, char **argv)
 
     if (!parse_args(&serv, argc, argv) || !open_server(&serv))
         return 84;
+    load_server(&serv);
     signal(SIGINT, handle_sigint);
     signal(SIGTERM, handle_sigint);
     printf("Server running on port %d\n", serv.port);
-    for (client_t client = {0};;) {
+    set_running_state(true);
+    for (client_t client = {0}; get_running_state();) {
         if (new_client(&serv, &client))
             append_to_array(&serv.clients, sizeof client, &client);
         for (size_t i = 0; i < serv.clients.size; ++i)
             handle_client(&serv, &serv.clients.arr[i]);
     }
+    save_server(&serv);
+    free_server(&serv);
+    return SUCCESS;
 }
