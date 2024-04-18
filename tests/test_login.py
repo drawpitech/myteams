@@ -1,10 +1,11 @@
-from server import run_teams
+from server import Team
 from pprint import pprint
 
 
 def test_login():
+    team = Team()
     name = "bob"
-    serv, cli = run_teams([
+    serv, cli = team.run([
         f'/login "{name}"\n',
     ])
     pprint(serv)
@@ -20,10 +21,10 @@ def test_login():
 
 
 def test_logout():
+    team = Team()
     name = "bob"
-    serv, cli = run_teams([
+    serv, cli = team.run([
         f'/login "{name}"\n',
-        '/logout\n',
     ])
     pprint(serv)
     pprint(cli)
@@ -40,15 +41,19 @@ def test_logout():
     assert cli[0][1] == uuid
     assert cli[0][2] == name
 
+    serv, cli = team.run([
+        '/logout\n',
+    ])
     # logout
 
-    assert serv[2][0] == "server_event_user_logged_out"
-    assert serv[2][1] == uuid
+    assert serv[0][0] == "server_event_user_logged_out"
+    assert serv[0][1] == uuid
 
-    assert cli[1][0] == "client_event_logged_out"
-    assert cli[1][1] == uuid
-    assert cli[1][2] == name
+    assert cli[0][0] == "client_event_logged_out"
+    assert cli[0][1] == uuid
+    assert cli[0][2] == name
 
 
 if __name__ == "__main__":
-    test_logout()
+    test_login()
+    # test_logout()

@@ -55,7 +55,6 @@ static void info_user(server_t *server, client_t *client)
     user_t *user = get_user_by_uuid(server, client->user);
     team_t *team = get_team_by_uuid(server, client->team);
 
-    printf("send user info\n");
     dprintf(client->fd, "215");
     fsync(client->fd);
     write(client->fd, user_to_info(user, &info, team), sizeof info);
