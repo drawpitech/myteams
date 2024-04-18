@@ -65,7 +65,7 @@ bool is_logged_in(client_t *client)
     if (client == NULL)
         return false;
     if (uuid_is_null(client->user)) {
-        dprintf(client->fd, "520\n");
+        dprintf(client->fd, "520");
         return false;
     }
     return true;

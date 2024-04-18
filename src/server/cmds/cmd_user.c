@@ -35,8 +35,10 @@ void cmd_user(server_t *server, client_t *client)
     if (!is_logged_in(client))
         return;
     arg = get_quoted_arg(client->buffer, 0, NULL);
-    if (arg == NULL)
-        arg = "";
+    if (arg == NULL) {
+        dprintf(client->fd, "502 Syntax error.\n");
+        return;
+    }
     uuid_parse(arg, uuid);
     user = get_user(server, client, uuid);
     if (user == NULL)

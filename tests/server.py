@@ -6,61 +6,70 @@ import time
 
 OUTPUT = list[list[str]]
 
+class Team:
+    def __init__(self):
+        port = find_available_port()
+        print(f"Using port: {port}")
+        path = pathlib.Path(__file__).parent.resolve()
+        so_path = path / "mock"
 
-def run_teams(cmds: list[str]) -> tuple[OUTPUT, OUTPUT]:
-    port = find_available_port()
-    print(f"Using port: {port}")
-    path = pathlib.Path(__file__).parent.resolve()
-    so_path = path / "mock"
+        # Check if mock libary exists
+        if not (so_path / "libmyteams.so").exists():
+            subprocess.run(["make", "-C", so_path])
+        if not (so_path / "libmyteams.so").exists():
+            raise FileNotFoundError("libmyteams.so")
 
-    # Check if mock libary exists
-    if not (so_path / "libmyteams.so").exists():
-        subprocess.run(["make", "-C", so_path])
-    if not (so_path / "libmyteams.so").exists():
-        raise FileNotFoundError("libmyteams.so")
+        envp = os.environ.copy()
+        envp.clear()
+        envp["LD_LIBRARY_PATH"] = str(so_path)
 
-    envp = os.environ.copy()
-    envp.clear()
-    envp["LD_LIBRARY_PATH"] = str(so_path)
+        self.server_proc = subprocess.Popen(
+            ["./myteams_server", str(port)],
+            env=envp,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
 
-    server_proc = subprocess.Popen(
-        ["./myteams_server", str(port)],
-        env=envp,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
+        self.client_proc = subprocess.Popen(
+            ["./myteams_cli", "0.0.0.0", str(port)],
+            env=envp,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        if self.client_proc.stdin is None:
+            raise Exception("Failed to open stdin")
+        os.set_blocking(self.server_proc.stderr.fileno(), False)
+        os.set_blocking(self.client_proc.stderr.fileno(), False)
 
-    client_proc = subprocess.Popen(
-        ["./myteams_cli", "0.0.0.0", str(port)],
-        env=envp,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    if client_proc.stdin is None:
-        raise Exception("Failed to open stdin")
+    def __del__(self):
+        self.server_proc.terminate()
+        self.client_proc.stdin.close()
+        if self.client_proc.wait() != 0:
+            print(f"{self.client_proc=}")
+            raise Exception("Client failed")
 
-    for command in cmds:
-        print(f"Sending command: {command}")
-        client_proc.stdin.write(command.encode())
-        client_proc.stdin.flush()
+    def run(self, cmds: list[str]) -> tuple[OUTPUT, OUTPUT, OUTPUT]:
+        for command in cmds:
+            if (command[-1] != '\n'):
+                command += '\n'
+            print(f"Sending command: {command}")
+            self.client_proc.stdin.write(command.encode())
+            self.client_proc.stdin.flush()
 
-    # Wait for the server to reply all the events
-    time.sleep(0.5)
+        # Wait for the server to reply all the events
+        time.sleep(0.5)
 
-    client_proc.stdin.close()
-    if client_proc.wait() != 0:
-        print(f"{client_proc=}")
-        raise Exception("Client failed")
+        out_server = self.server_proc.stderr
+        out_client = self.client_proc.stderr
+        if out_server is None or out_client is None:
+            raise Exception("Server or client failed")
 
-    server_proc.terminate()
-
-    out_server = server_proc.stderr
-    out_client = client_proc.stderr
-    if out_server is None or out_client is None:
-        raise Exception("Server or client failed")
-
-    return decode(out_server.read()), decode(out_client.read())
+        if (read_server := out_server.read()):
+            read_server = decode(read_server)
+        if (read_client := out_client.read()):
+            read_client = decode(read_client)
+        return read_server, read_client
 
 
 def find_available_port():
