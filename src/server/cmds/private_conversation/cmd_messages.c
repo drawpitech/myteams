@@ -61,7 +61,7 @@ void cmd_messages(server_t *server, client_t *client)
         return;
     if (!get_uuid(server, client, &uuid, &arg_pos))
         return;
-    discussion = get_conv(server, client->user->uuid, uuid);
+    discussion = get_conv(server, client->user, uuid);
     if (!discussion)
         return;
     printf("fjdhskfhsdkj\n");

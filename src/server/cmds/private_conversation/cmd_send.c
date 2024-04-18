@@ -28,7 +28,7 @@ static void send_to_user(server_t *server, message_t *message, uuid_t receive)
     info.timestamp = message->timestamp;
     strcpy(info.body, message->body);
     for (size_t i = 0; i < server->clients.size; i++) {
-        if (uuid_compare(server->clients.arr[i].user->uuid, receive) == 0) {
+        if (uuid_compare(server->clients.arr[i].user, receive) == 0) {
             write(server->clients.arr[i].fd, "320", 3);
             write(server->clients.arr[i].fd, &info, sizeof(info));
         }
@@ -43,11 +43,11 @@ static bool send_message(
     char receiver[UUID_STR_LEN] = {0};
 
     if (uuid_is_null(disc->user_1uuid) || uuid_is_null(disc->user_2uuid)) {
-        uuid_copy(disc->user_1uuid, client->user->uuid);
+        uuid_copy(disc->user_1uuid, client->user);
         uuid_copy(disc->user_2uuid, uuid);
     }
     append_to_array(&disc->messages, sizeof(message_t), message);
-    uuid_unparse(client->user->uuid, sender);
+    uuid_unparse(client->user, sender);
     uuid_unparse(uuid, receiver);
     server_event_private_message_sended(sender, receiver, message->body);
     send_to_user(server, message, uuid);
@@ -60,7 +60,7 @@ static bool create_message(
     message_t message = {0};
     char *description = NULL;
 
-    uuid_copy(message.sender_uuid, client->user->uuid);
+    uuid_copy(message.sender_uuid, client->user);
     message.timestamp = time(NULL);
     description = get_quoted_arg(client->buffer, *arg_pos, arg_pos);
     if (description == NULL) {
