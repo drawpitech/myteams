@@ -56,7 +56,7 @@ static bool channel_already_exist(team_t *team, client_t *client, char *name)
 {
     for (size_t i = 0; name && i < team->channels.size; i++) {
         if (strcmp(name, team->channels.arr[i].name) == 0) {
-            dprintf(client->fd, "530\n");
+            write(client->fd, "530", 3);
             return true;
         }
     }

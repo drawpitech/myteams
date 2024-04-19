@@ -76,7 +76,7 @@ static bool thread_already_exist(
 
     for (size_t i = 0; name && i < channel->threads.size; i++) {
         if (strcmp(name, channel->threads.arr[i].title) == 0) {
-            dprintf(client->fd, "530\n");
+            write(client->fd, "530", 3);
             return true;
         }
     }

@@ -45,7 +45,7 @@ static bool team_already_exist(server_t *server, client_t *client, char *name)
 {
     for (size_t i = 0; name && i < server->teams.size; i++) {
         if (strcmp(name, server->teams.arr[i].name) == 0) {
-            dprintf(client->fd, "530\n");
+            write(client->fd, "530", 3);
             return true;
         }
     }
