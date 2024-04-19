@@ -7,7 +7,8 @@ import time
 OUTPUT = list[list[str]]
 
 class Team:
-    def __init__(self):
+    def __init__(self, keep_save: bool=False):
+        self.keep_save = keep_save
         port = find_available_port()
         print(f"Using port: {port}")
         path = pathlib.Path(__file__).parent.resolve()
@@ -48,6 +49,11 @@ class Team:
         if self.client_proc.wait() != 0:
             print(f"{self.client_proc=}")
             raise Exception("Client failed")
+        if (not self.keep_save):
+            try:
+                os.remove("data.tits")
+            except FileNotFoundError:
+                print("It seems that something went wrong")
 
     def run(self, cmds: list[str]) -> tuple[OUTPUT, OUTPUT, OUTPUT]:
         for command in cmds:
