@@ -79,13 +79,15 @@ int run_client(connection_t *connection)
     if (!connection)
         return MSG_ERR("Memory failed\n");
     connection->last_cmd = other;
-    while (state != cli_exit) {
-        if (state != prompt) {
+    connection->wait = 0;
+    while (state != cli_exit || connection->wait != 0) {
+        if (state != prompt && state != cli_exit) {
             printf("> ");
             fflush(stdout);
             state = prompt;
         }
-        if (is_fd_ready(STDIN_FILENO))
+        connection->wait = connection->wait < 0 ? 0 : connection->wait;
+        if (is_fd_ready(STDIN_FILENO) && connection->wait == 0)
             state = handle_cmd(connection, get_command());
         if (is_fd_ready(connection->servfd))
             state = get_serv_info(connection);

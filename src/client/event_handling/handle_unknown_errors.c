@@ -11,7 +11,6 @@
 
 #include "client.h"
 #include "handle_event.h"
-#include "ressources_infos.h"
 #include "run_client.h"
 #include "utils.h"
 
@@ -19,6 +18,7 @@ int unknown_team(connection_t *connect)
 {
     char uuid[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &uuid, sizeof(uuid)) != SUCCESS)
         return ERROR;
     client_error_unknown_team(uuid);
@@ -29,6 +29,7 @@ int unknown_channel(connection_t *connect)
 {
     char uuid[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &uuid, sizeof(uuid)) != SUCCESS)
         return ERROR;
     client_error_unknown_channel(uuid);
@@ -39,6 +40,7 @@ int unknown_thread(connection_t *connect)
 {
     char uuid[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &uuid, sizeof(uuid)) != SUCCESS)
         return ERROR;
     client_error_unknown_thread(uuid);
@@ -49,6 +51,7 @@ int unknown_user(connection_t *connect)
 {
     char uuid[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &uuid, sizeof(uuid)) != SUCCESS)
         return ERROR;
     client_error_unknown_user(uuid);

@@ -17,6 +17,7 @@ int standard_error(connection_t *connect)
 {
     char c = '\0';
 
+    connect->wait -= 1;
     while (c != '\n') {
         if (read(connect->servfd, &c, 1) == 1)
             write(1, &c, 1);
@@ -26,12 +27,14 @@ int standard_error(connection_t *connect)
 
 int error_unauthorized(UNUSED connection_t *connect)
 {
+    connect->wait -= 1;
     client_error_unauthorized();
     return SUCCESS;
 }
 
 int error_already_exist(UNUSED connection_t *connect)
 {
+    connect->wait -= 1;
     client_error_already_exist();
     return SUCCESS;
 }

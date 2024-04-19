@@ -21,6 +21,7 @@ int reply_l_users(connection_t *connect)
     size_t nb_elt = 0;
     char user_uuid[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
     for (size_t i = 0; i < nb_elt; i++) {
@@ -38,6 +39,7 @@ int reply_l_messages(connection_t *connect)
     size_t nb_elt = 0;
     char sender_uuid[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
     for (size_t i = 0; i < nb_elt; i++) {

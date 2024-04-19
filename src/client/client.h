@@ -21,6 +21,7 @@ typedef struct connection_s {
     int servfd;
     struct sockaddr_in sockaddr;
     enum command_type last_cmd;
+    int wait;
 } connection_t;
 
 int myteams_cli(int argc, char **argv);

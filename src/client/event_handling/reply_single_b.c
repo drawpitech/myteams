@@ -28,8 +28,10 @@ int reply_s_user(connection_t *connect)
         client_print_subscribed(user_uuid, team_uuid);
     if (connect->last_cmd == unsubscribe)
         client_print_unsubscribed(user_uuid, team_uuid);
-    if (connect->last_cmd == info_cmd || connect->last_cmd == other)
+    if (connect->last_cmd == info_cmd || connect->last_cmd == other) {
         client_print_user(user_uuid, info.name, info.status);
+        connect->wait -= 1;
+    }
     return SUCCESS;
 }
 
@@ -38,6 +40,7 @@ int reply_s_message(connection_t *connect)
     user_info_t info = {0};
     char user_uuid[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &info, sizeof(info)) != SUCCESS)
         return ERROR;
     uuid_unparse(info.user_uuid, user_uuid);

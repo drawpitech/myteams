@@ -19,6 +19,7 @@ int standar_success(connection_t *connect)
 {
     char c = '\0';
 
+    connect->wait -= 1;
     while (c != '\n') {
         if (read(connect->servfd, &c, 1) == 1)
             write(1, &c, 1);
@@ -32,6 +33,7 @@ int reply_l_team(connection_t *connect)
     size_t nb_elt = 0;
     char uuid_str[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
     for (size_t i = 0; i < nb_elt; i++) {
@@ -49,6 +51,7 @@ int reply_l_channel(connection_t *connect)
     size_t nb_elt = 0;
     char uuid_str[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
     for (size_t i = 0; i < nb_elt; i++) {
@@ -67,6 +70,7 @@ int reply_l_threads(connection_t *connect)
     char user_uuid[UUID_STR_LEN] = {0};
     char thread_uuid[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
     for (size_t i = 0; i < nb_elt; i++) {
@@ -87,6 +91,7 @@ int reply_l_replies(connection_t *connect)
     char user_uuid[UUID_STR_LEN] = {0};
     char thread_uuid[UUID_STR_LEN] = {0};
 
+    connect->wait -= 1;
     if (get_info_type(connect, &nb_elt, sizeof(nb_elt)) != SUCCESS)
         return ERROR;
     for (size_t i = 0; i < nb_elt; i++) {

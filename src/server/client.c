@@ -40,7 +40,10 @@ static void client_process_message(
     server_t *serv, client_t *client, char *buffer)
 {
     char *ptr = NULL;
+    int i = 0;
 
+    for (; buffer[i] == '\n' || buffer[i] == ' ' || buffer[i] == '\t'; i++);
+    buffer = buffer + i;
     if (client == NULL || buffer == NULL || buffer[0] == '\0')
         return;
     ptr = strchr(buffer, '\n');
@@ -73,7 +76,7 @@ static bool client_wrote(client_t *client)
 
 void handle_client(server_t *serv, client_t *client)
 {
-    char buffer[BUFSIZ + 1];
+    char buffer[BUFSIZ + 1] = {0};
     ssize_t size = 0;
 
     if (!client_wrote(client))
