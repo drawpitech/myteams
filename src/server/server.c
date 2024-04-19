@@ -55,7 +55,7 @@ void append_to_array(void *array, size_t size, void *elem)
 static bool new_client(server_t *serv, client_t *client)
 {
     socklen_t addr_len = sizeof(client->addr);
-    struct timeval tv = {.tv_sec = 0, .tv_usec = 1000};
+    struct timeval tv = {.tv_sec = 0, .tv_usec = 100};
     fd_set fdread;
     fd_set fdwrite;
     int fd;

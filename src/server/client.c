@@ -63,7 +63,7 @@ static void client_process_message(
 static bool client_wrote(client_t *client)
 {
     fd_set fdread;
-    struct timeval tv = {.tv_sec = 0, .tv_usec = 1000};
+    struct timeval tv = {.tv_sec = 0, .tv_usec = 100};
 
     if (client->fd == -1)
         return false;

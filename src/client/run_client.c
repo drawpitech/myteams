@@ -64,7 +64,7 @@ static bool is_fd_ready(int fd)
     fd_set rfds;
 
     tv.tv_sec = 0;
-    tv.tv_usec = 1000;
+    tv.tv_usec = 100;
     FD_ZERO(&rfds);
     FD_SET(fd, &rfds);
     if (select(fd + 1, &rfds, NULL, NULL, &tv) > 0)
@@ -80,14 +80,14 @@ int run_client(connection_t *connection)
         return MSG_ERR("Memory failed\n");
     connection->last_cmd = other;
     connection->wait = 0;
-    while (state != cli_exit || connection->wait != 0) {
+    while (state != cli_exit || connection->wait > 0) {
         if (state != prompt && state != cli_exit) {
             printf("> ");
             fflush(stdout);
             state = prompt;
         }
         connection->wait = connection->wait < 0 ? 0 : connection->wait;
-        if (is_fd_ready(STDIN_FILENO) && connection->wait == 0)
+        if (is_fd_ready(STDIN_FILENO) && connection->wait <= 0)
             state = handle_cmd(connection, get_command());
         if (is_fd_ready(connection->servfd))
             state = get_serv_info(connection);
