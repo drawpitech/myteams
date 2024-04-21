@@ -14,7 +14,6 @@
 
 int cmd_send(connection_t *connect, const char *cmd, const cmd_conv_t *command)
 {
-    connect->wait += 1;
     dprintf(
         connect->servfd, "%s%s\n", command->conv, cmd + strlen(command->cmd));
     return SUCCESS;
