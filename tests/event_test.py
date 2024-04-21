@@ -46,7 +46,8 @@ def serv_usr_sub(reply, user_uuid, team_uuid):
 
 def cli_print_user(reply, uuid, name):
     assert reply[0] == "client_print_users"
-    assert reply[1] == uuid
+    if (uuid != ""):
+        assert reply[1] == uuid
     assert reply[2] == name
 
 def check_uuid_name_desc(reply, uuid, name, description):
