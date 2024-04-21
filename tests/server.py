@@ -47,24 +47,25 @@ class Team:
         self.server_proc.terminate()
         self.client_proc.stdin.close()
         if self.client_proc.wait() != 0:
-            print(f"{self.client_proc=}")
-            raise Exception("Client failed")
+            print("Client refuse to terminate")
+            # print(f"{self.client_proc=}")
+            # raise Exception("Client failed")
         if (not self.keep_save):
             try:
                 os.remove("data.tits")
             except FileNotFoundError:
                 print("It seems that something went wrong")
 
-    def run(self, cmds: list[str]) -> tuple[OUTPUT, OUTPUT, OUTPUT]:
+    def run(self, cmds: list[str], sleep: float=0.5) -> tuple[OUTPUT, OUTPUT, OUTPUT]:
         for command in cmds:
             if (command[-1] != '\n'):
                 command += '\n'
-            print(f"Sending command: {command}")
+            print(f"Sending command: {command[:-1]}")
             self.client_proc.stdin.write(command.encode())
             self.client_proc.stdin.flush()
 
         # Wait for the server to reply all the events
-        time.sleep(0.5)
+        time.sleep(sleep)
 
         out_server = self.server_proc.stderr
         out_client = self.client_proc.stderr

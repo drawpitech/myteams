@@ -6,7 +6,7 @@ int server_event_team_created(
     char const *team_name,
     char const *user_uuid)
 {
-    fprintf(stderr, "server_event_team_created\t%s\t%s\t%s\n", team_uuid, team_name, team_uuid);
+    fprintf(stderr, "server_event_team_created\t%s\t%s\t%s\n", team_uuid, team_name, user_uuid);
     return 0;
 }
 
@@ -15,7 +15,7 @@ int server_event_channel_created(
     char const *channel_uuid,
     char const *channel_name)
 {
-    fprintf(stderr, "server_event_team_created\t%s\t%s\t%s\n", team_uuid, channel_uuid, channel_name);
+    fprintf(stderr, "server_event_channel_created\t%s\t%s\t%s\n", team_uuid, channel_uuid, channel_name);
     return 0;
 }
 
