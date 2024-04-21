@@ -46,7 +46,8 @@ prof: all
 tests: SERVER_TARGET := tests
 tests: CLIENT_TARGET := tests
 tests: all
-	touch tmp.tits
+	@ touch data.tits
+	@ touch tmp.tits
 	mv data.tits tmp.tits
 	@ pytest -n 4
 	mv tmp.tits data.tits

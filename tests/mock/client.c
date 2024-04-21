@@ -195,12 +195,25 @@ int client_print_thread(
 }
 
 int client_print_team_created(
-    char const *team_uuid, char const *team_name,
-    char const *team_description);
+    char const *team_uuid, char const *team_name, char const *team_description)
+{
+    fprintf(
+        stderr, "client_print_team_created\t%s\t%s\t%s\n", team_uuid, team_name,
+        team_description);
+    return 0;
+}
 
 int client_print_channel_created(
     char const *channel_uuid, char const *channel_name,
-    char const *channel_description);
+    char const *channel_description)
+{
+    {
+        fprintf(
+            stderr, "client_print_channel_created\t%s\t%s\t%s\n", channel_uuid, channel_name,
+            channel_description);
+        return 0;
+    }
+}
 
 int client_print_thread_created(
     char const *thread_uuid, char const *user_uuid, time_t thread_timestamp,
