@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  myteams:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /var/run/myteams:/pool
+    ports:
+      - "6969:6969"
